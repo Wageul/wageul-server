@@ -1,5 +1,8 @@
 name: production Deploy
-
+on:
+  push:
+    branches:
+      - main
 env:
   DOCKERHUB_USERNAME: ywonchae62
   DOCKERHUB_IMAGE_NAME: wageul79

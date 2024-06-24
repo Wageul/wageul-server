@@ -7,3 +7,5 @@ services:
     restart: always
     environment:
       - TZ=Asia/Seoul
+    ports:
+      - '8080:8080'

@@ -1,27 +1,92 @@
 name: production Deploy
-
 on:
-  workflow_dispatch:
-    inputs:
-      version:
-        description: 'version'
-        required: true
-
+  push:
+    branches:
+      - main
 env:
-  DOCKERHUB_USERNAME: tenminutes
-  DOCKERHUB_IMAGE_NAME: 10mm-server
+  DOCKERHUB_USERNAME: ywonchae62
+  DOCKERHUB_IMAGE_NAME: wageul79
 
 jobs:
-  deploy:
+  build-deploy:
     runs-on: ubuntu-latest
     environment: PROD
+    strategy:
+      matrix:
+        java-version: [ 21 ]
+        distribution: [ 'temurin' ]
+
     steps:
+      # 기본 체크아웃
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      # JDK를 17 버전으로 세팅
+      - name: Set up JDK 17
+        uses: actions/setup-java@v3
+        with:
+          java-version: ${{ matrix.java-version }}
+          distribution: ${{ matrix.distribution }}
+
+      # Gradlew 실행 허용
+      - name: Run chmod to make gradlew executable
+        run: chmod +x ./gradlew
+
+      # Gradle 빌드
+      - name: Build with Gradle
+        id: gradle
+        uses: gradle/gradle-build-action@v2
+        with:
+          arguments: |
+            build
+            --scan
+          cache-read-only: ${{ github.ref != 'refs/heads/main' && github.ref != 'refs/heads/develop' }}
+
+      # Dockerhub 로그인
+      - name: Login to Dockerhub
+        uses: docker/login-action@v3
+        with:
+          username: ${{ env.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_ACCESS_TOKEN }}
+
+      # Docker 메타데이터 추출
+      - name: Extract Docker metadata
+        id: metadata
+        uses: docker/metadata-action@v5.5.0
+        env:
+          DOCKERHUB_IMAGE_FULL_NAME: ${{ env.DOCKERHUB_USERNAME }}/${{ env.DOCKERHUB_IMAGE_NAME }}
+        with:
+          images: ${{ env.DOCKERHUB_IMAGE_FULL_NAME }}
+          tags: |
+            type=semver,pattern={{version}}
+          flavor: |
+            latest=false
+
+      # Docker 이미지 빌드 및 도커허브로 푸시
+      - name: Docker Build and Push
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          platforms: linux/arm64/v8
+          push: true
+          tags: ${{ steps.metadata.outputs.tags }}
+
+      # 서버로 docker-compose 파일 전송
+      - name: Copy docker-compose file to EC2
+        uses: burnett01/rsync-deployments@7.0.1
+        with:
+          switches: -avzr --delete
+          remote_host: ${{ secrets.EC2_HOST }}
+          remote_user: ${{ secrets.EC2_USERNAME }}
+          remote_key: ${{ secrets.EC2_PRIVATE_KEY }}
+          path: docker-compose.yaml
+          remote_path: /home/ubuntu/
+
       # EC2로 배포
       - name: Deploy to EC2 Server
         uses: appleboy/ssh-action@master
         env:
           IMAGE_FULL_URL: ${{ steps.metadata.outputs.tags }}
-          DOCKERHUB_IMAGE_NAME: ${{ env.DOCKERHUB_IMAGE_NAME }}
         with:
           host: ${{ secrets.EC2_HOST }}
           username: ${{ secrets.EC2_USERNAME }}
@@ -30,5 +95,4 @@ jobs:
           script: |
             echo "${{ secrets.DOCKERHUB_ACCESS_TOKEN }}" | docker login -u "${{ env.DOCKERHUB_USERNAME }}" --password-stdin
             docker compose up -d
-            docker exec -d nginx nginx -s reload
             docker image prune -a -f

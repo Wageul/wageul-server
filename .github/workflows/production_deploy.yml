@@ -37,7 +37,7 @@ jobs:
           echo "GOOGLE_REDIRECT_URL=${{ secrets.GOOGLE_REDIRECT_URL }}" >> $GITHUB_ENV
           echo "JWT_SECRET=${{ secrets.JWT_SECRET }}" >> $GITHUB_ENV
           echo "PSQL_PASSWORD=${{ secrets.PSQL_PASSWORD }}" >> $GITHUB_ENV
-          echo "PSQL_URL=:${{ secrets.PSQL_URL }}" >> $GITHUB_ENV
+          echo "PSQL_URL=${{ secrets.PSQL_URL }}" >> $GITHUB_ENV
           echo "PSQL_USERNAME=${{ secrets.PSQL_USERNAME }}" >> $GITHUB_ENV
 
       # Gradlew 실행 허용

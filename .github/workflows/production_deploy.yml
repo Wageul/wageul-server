@@ -28,18 +28,6 @@ jobs:
           distribution: 'temurin' # See 'Supported distributions' for available options
           java-version: '21'
 
-      # 환경변수 적용
-      - name: Set environment variables
-        run: |
-          echo "GOOGLE_AUTH_CODE=${{ secrets.GOOGLE_AUTH_CODE }}" >> $GITHUB_ENV
-          echo "GOOGLE_CLIENT_ID=${{ secrets.GOOGLE_CLIENT_ID }}" >> $GITHUB_ENV
-          echo "GOOGLE_CLIENT_SECRET=${{ secrets.GOOGLE_CLIENT_SECRET }}" >> $GITHUB_ENV
-          echo "GOOGLE_REDIRECT_URL=${{ secrets.GOOGLE_REDIRECT_URL }}" >> $GITHUB_ENV
-          echo "JWT_SECRET=${{ secrets.JWT_SECRET }}" >> $GITHUB_ENV
-          echo "PSQL_PASSWORD=${{ secrets.PSQL_PASSWORD }}" >> $GITHUB_ENV
-          echo "PSQL_URL=${{ secrets.PSQL_URL }}" >> $GITHUB_ENV
-          echo "PSQL_USERNAME=${{ secrets.PSQL_USERNAME }}" >> $GITHUB_ENV
-
       # Gradlew 실행 허용
       - name: Run chmod to make gradlew executable
         run: chmod +x ./gradlew
@@ -92,6 +80,29 @@ jobs:
           remote_user: ${{ secrets.EC2_USERNAME }}
           remote_key: ${{ secrets.EC2_PRIVATE_KEY }}
           path: docker-compose.yaml
+          remote_path: /home/${{ secrets.EC2_USERNAME }}/
+
+      # 환경변수 적용
+      - name: Set environment variables
+        run: |
+          echo "GOOGLE_AUTH_CODE=${{ secrets.GOOGLE_AUTH_CODE }}" >> .env
+          echo "GOOGLE_CLIENT_ID=${{ secrets.GOOGLE_CLIENT_ID }}" >> .env
+          echo "GOOGLE_CLIENT_SECRET=${{ secrets.GOOGLE_CLIENT_SECRET }}" >> .env
+          echo "GOOGLE_REDIRECT_URL=${{ secrets.GOOGLE_REDIRECT_URL }}" >> .env
+          echo "JWT_SECRET=${{ secrets.JWT_SECRET }}" >> .env
+          echo "PSQL_PASSWORD=${{ secrets.PSQL_PASSWORD }}" >> .env
+          echo "PSQL_URL=${{ secrets.PSQL_URL }}" >> .env
+          echo "PSQL_USERNAME=${{ secrets.PSQL_USERNAME }}" >> .env
+
+      # 서버로 .env 파일 전송
+      - name: Copy .env file to EC2
+        uses: burnett01/rsync-deployments@7.0.1
+        with:
+          switches: -avzr --delete
+          remote_host: ${{ secrets.EC2_HOST }}
+          remote_user: ${{ secrets.EC2_USERNAME }}
+          remote_key: ${{ secrets.EC2_PRIVATE_KEY }}
+          path: .env
           remote_path: /home/${{ secrets.EC2_USERNAME }}/
 
       # EC2로 배포

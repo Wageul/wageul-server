@@ -28,6 +28,18 @@ jobs:
           distribution: 'temurin' # See 'Supported distributions' for available options
           java-version: '21'
 
+      # 환경변수 적용
+      - name: Set environment variables
+        run: |
+          echo "::set-env name=GOOGLE_AUTH_CODE::${{ secrets.GOOGLE_AUTH_CODE }}"
+          echo "::set-env name=GOOGLE_CLIENT_ID::${{ secrets.GOOGLE_CLIENT_ID }}"
+          echo "::set-env name=GOOGLE_CLIENT_SECRET::${{ secrets.GOOGLE_CLIENT_SECRET }}"
+          echo "::set-env name=GOOGLE_REDIRECT_URL::${{ secrets.GOOGLE_REDIRECT_URL }}"
+          echo "::set-env name=JWT_SECRET::${{ secrets.JWT_SECRET }}"
+          echo "::set-env name=PSQL_PASSWORD::${{ secrets.PSQL_PASSWORD }}"
+          echo "::set-env name=PSQL_URL::${{ secrets.PSQL_URL }}"
+          echo "::set-env name=PSQL_USERNAME::${{ secrets.PSQL_USERNAME }}"
+
       # Gradlew 실행 허용
       - name: Run chmod to make gradlew executable
         run: chmod +x ./gradlew

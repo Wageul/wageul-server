@@ -21,12 +21,12 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v3
 
-      # JDK를 17 버전으로 세팅
-      - name: Set up JDK 17
-        uses: actions/setup-java@v3
+      # JDK를 21 버전으로 세팅
+      - name: Set up JDK 21
+        uses: actions/setup-java@v4
         with:
-          java-version: ${{ matrix.java-version }}
-          distribution: ${{ matrix.distribution }}
+          distribution: 'temurin' # See 'Supported distributions' for available options
+          java-version: '21'
 
       # Gradlew 실행 허용
       - name: Run chmod to make gradlew executable

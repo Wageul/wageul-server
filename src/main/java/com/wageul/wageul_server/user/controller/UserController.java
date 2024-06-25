@@ -22,7 +22,7 @@ public class UserController {
     private final UserService userService;
 
     @RequestMapping("/{userId}")
-    public ResponseEntity<User> getById(@PathVariable("userId") long userId, @CookieValue("token") String token) {
+    public ResponseEntity<User> getById(@PathVariable("userId") long userId, @CookieValue(value = "token", required = false) String token) {
         User user = userService.findById(userId, token);
         if(user == null) {
             HttpHeaders headers = new HttpHeaders();

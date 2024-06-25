@@ -27,7 +27,8 @@ public class UserService {
     }
 
     public User findById(long id, String token) {
-        long userId = jwtTokenGenerator.extractUserId(token);
+        long userId = -1;
+        if(token != null) jwtTokenGenerator.extractUserId(token);
         if(userId == id)
             return userRepository.findById(id).orElse(null);
         else

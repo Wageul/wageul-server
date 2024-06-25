@@ -41,4 +41,13 @@ public class ExperienceController {
         experience = experienceService.create(experience);
         return ResponseEntity.ok().body(experience);
     }
+
+    @GetMapping("/{experienceId}")
+    public ResponseEntity<Experience> getById(@PathVariable("experienceId") long experienceId) {
+        Experience experience = experienceService.getById(experienceId);
+        if(experience == null) {
+            return ResponseEntity.notFound().build();
+        }
+        return ResponseEntity.ok().body(experience);
+    }
 }

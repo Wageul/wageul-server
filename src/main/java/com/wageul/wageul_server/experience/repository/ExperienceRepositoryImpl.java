@@ -22,4 +22,9 @@ public class ExperienceRepositoryImpl implements ExperienceRepository {
     public Experience save(Experience experience) {
         return experienceJpaRepository.save(ExperienceEntity.from(experience)).toModel();
     }
+
+    @Override
+    public Experience findById(long id) {
+        return experienceJpaRepository.findById(id).map(ExperienceEntity::toModel).orElse(null);
+    }
 }

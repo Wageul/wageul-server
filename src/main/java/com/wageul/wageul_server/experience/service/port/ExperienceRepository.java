@@ -9,4 +9,6 @@ public interface ExperienceRepository {
     List<Experience> findAll();
 
     Experience save(Experience experience);
+
+    Experience findById(long id);
 }

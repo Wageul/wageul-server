@@ -23,4 +23,8 @@ public class ExperienceService {
     public Experience create(Experience experience) {
         return experienceRepository.save(experience);
     }
+
+    public Experience getById(long id) {
+        return experienceRepository.findById(id);
+    }
 }

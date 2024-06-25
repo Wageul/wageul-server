@@ -1,4 +1,4 @@
-package com.wageul.wageul_server.user;
+package com.wageul.wageul_server.user.repository;
 
 import com.wageul.wageul_server.user.domain.User;
 import jakarta.persistence.*;

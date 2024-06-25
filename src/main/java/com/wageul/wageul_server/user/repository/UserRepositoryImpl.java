@@ -1,6 +1,5 @@
 package com.wageul.wageul_server.user.repository;
 
-import com.wageul.wageul_server.user.UserEntity;
 import com.wageul.wageul_server.user.domain.User;
 import com.wageul.wageul_server.user.service.port.UserRepository;
 import lombok.RequiredArgsConstructor;

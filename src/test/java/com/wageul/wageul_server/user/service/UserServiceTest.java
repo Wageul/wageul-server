@@ -3,8 +3,7 @@ package com.wageul.wageul_server.user.service;
 import com.wageul.wageul_server.common.JwtTokenGenerator;
 import com.wageul.wageul_server.user.domain.User;
 import com.wageul.wageul_server.user.dto.UserUpdate;
-import com.wageul.wageul_server.user.mock.FakeUserRepository;
-import com.wageul.wageul_server.user.service.port.UserRepository;
+import com.wageul.wageul_server.mock.FakeUserRepository;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 

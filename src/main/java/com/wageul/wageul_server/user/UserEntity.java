@@ -22,12 +22,6 @@ public class UserEntity {
     @Column(name = "nationality")
     private String nationality;
 
-    @Column(name = "language")
-    private String language;
-
-    @Column(name = "ageRange")
-    private int ageRange;
-
     @Column(name = "introduce")
     private String introduce;
 
@@ -38,8 +32,6 @@ public class UserEntity {
         userEntity.profileImg = user.getProfileImg();
         userEntity.name = user.getName();
         userEntity.nationality = user.getNationality();
-        userEntity.language = user.getLanguage();
-        userEntity.ageRange = user.getAgeRange();
         userEntity.introduce = user.getIntroduce();
         return userEntity;
     }
@@ -51,8 +43,6 @@ public class UserEntity {
                 .profileImg(profileImg)
                 .name(name)
                 .nationality(nationality)
-                .language(language)
-                .ageRange(ageRange)
                 .introduce(introduce)
                 .build();
     }

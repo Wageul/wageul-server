@@ -5,12 +5,14 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 
 @Entity
-@Getter
+@Table(name = "experiences")
+@EntityListeners(AuditingEntityListener.class)
 public class ExperienceEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -63,8 +65,6 @@ public class ExperienceEntity {
         experienceEntity.contact = experience.getContact();
         experienceEntity.limitMember = experience.getLimitMember();
         experienceEntity.language = experience.getLanguage();
-        experienceEntity.createdAt = experience.getCreatedAt();
-        experienceEntity.updatedAt = experience.getUpdatedAt();
         return experienceEntity;
     }
 

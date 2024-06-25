@@ -22,13 +22,13 @@ public class ExperienceController {
 
     private final ExperienceService experienceService;
 
-    @GetMapping("/")
+    @GetMapping("")
     public ResponseEntity<List<Experience>> getAll() {
         List<Experience> experiences = experienceService.getAll();
         return ResponseEntity.ok().body(experiences);
     }
 
-    @PostMapping("/")
+    @PostMapping("")
     public ResponseEntity<Experience> create(
             @CookieValue("token") String token,
             @RequestBody ExperienceCreate experienceCreate) {

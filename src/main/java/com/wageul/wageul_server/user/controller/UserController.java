@@ -1,8 +1,6 @@
 package com.wageul.wageul_server.user.controller;
 
 import com.wageul.wageul_server.user.domain.User;
-import com.wageul.wageul_server.user.dto.LoginResponse;
-import com.wageul.wageul_server.user.dto.UserResponse;
 import com.wageul.wageul_server.user.service.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

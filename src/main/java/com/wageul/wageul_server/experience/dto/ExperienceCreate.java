@@ -1,8 +1,10 @@
 package com.wageul.wageul_server.experience.dto;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Builder;
 import lombok.Getter;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import java.time.LocalDateTime;
 import java.time.LocalTime;
@@ -24,9 +26,9 @@ public class ExperienceCreate {
     public ExperienceCreate(
             @JsonProperty("title") String title,
             @JsonProperty("location") String location,
-            @JsonProperty("datetime") LocalDateTime datetime,
+            @JsonProperty("datetime") @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm", timezone = "Asia/Seoul") LocalDateTime datetime,
             @JsonProperty("content") String content,
-            @JsonProperty("duration") LocalTime duration,
+            @JsonProperty("duration") @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "HH:mm", timezone = "Asia/Seoul") LocalTime duration,
             @JsonProperty("cost") int cost,
             @JsonProperty("contact") String contact,
             @JsonProperty("limitMember") int limitMember,

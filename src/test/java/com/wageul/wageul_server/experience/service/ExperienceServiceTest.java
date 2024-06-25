@@ -76,4 +76,35 @@ class ExperienceServiceTest {
         Assertions.assertThat(newExperience.getLimitMember()).isEqualTo(15);
         Assertions.assertThat(newExperience.getLanguage()).isEqualTo("language");
     }
+
+    @Test
+    void 체험하나조회() {
+        // given
+        Experience experience = Experience.builder()
+                .title("title")
+                .location("location")
+                .datetime(LocalDateTime.of(2024, 6, 25, 16, 41, 0))
+                .content("content")
+                .duration(LocalTime.of(4, 0, 0))
+                .cost(10000)
+                .contact("contact")
+                .limitMember(15)
+                .language("language")
+                .build();
+
+        // when
+        experienceService.create(experience);
+        Experience experience1 = experienceService.getById(1);
+
+        // then
+        Assertions.assertThat(experience1.getTitle()).isEqualTo("title");
+        Assertions.assertThat(experience1.getLocation()).isEqualTo("location");
+        Assertions.assertThat(experience1.getDatetime()).isEqualTo(LocalDateTime.of(2024, 6, 25, 16, 41, 0));
+        Assertions.assertThat(experience1.getContent()).isEqualTo("content");
+        Assertions.assertThat(experience1.getDuration()).isEqualTo(LocalTime.of(4, 0, 0));
+        Assertions.assertThat(experience1.getCost()).isEqualTo(10000);
+        Assertions.assertThat(experience1.getContact()).isEqualTo("contact");
+        Assertions.assertThat(experience1.getLimitMember()).isEqualTo(15);
+        Assertions.assertThat(experience1.getLanguage()).isEqualTo("language");
+    }
 }

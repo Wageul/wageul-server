@@ -1,4 +1,4 @@
-package com.wageul.wageul_server.user.mock;
+package com.wageul.wageul_server.mock;
 
 import com.wageul.wageul_server.user.domain.User;
 import com.wageul.wageul_server.user.service.port.UserRepository;

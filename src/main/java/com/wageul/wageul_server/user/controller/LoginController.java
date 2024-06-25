@@ -2,10 +2,12 @@ package com.wageul.wageul_server.user.controller;
 
 import com.wageul.wageul_server.user.dto.LoginResponse;
 import com.wageul.wageul_server.user.service.LoginService;
+import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -36,8 +38,13 @@ public class LoginController {
     }
 
     @GetMapping("/api/google/login/code")
-    public ResponseEntity<LoginResponse> googleLoginProcess(@RequestParam(name = "code") String code) {
+    public ResponseEntity<LoginResponse> googleLoginProcess(@RequestParam(name = "code") String code, HttpServletResponse response) {
         LoginResponse loginResponse = loginService.loginByGoogle(code);
-        return ResponseEntity.ok().body(loginResponse);
+        Cookie tokenCookie = new Cookie("token", loginResponse.token());
+        tokenCookie.setPath("/");
+        response.addCookie(tokenCookie);
+        return ResponseEntity
+                .ok()
+                .body(loginResponse);
     }
 }

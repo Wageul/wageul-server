@@ -18,7 +18,7 @@ public class JwtTokenGenerator {
         final Claims claims = Jwts.claims();
         claims.put("userId", id);
         final Date now = new Date();
-        final Date expiredDate = new Date(now.getTime() - expireLength);
+        final Date expiredDate = new Date(now.getTime() + expireLength);
         return Jwts.builder()
                 .setClaims(claims)
                 .setIssuedAt(now)
@@ -28,16 +28,11 @@ public class JwtTokenGenerator {
     }
 
     public long extractUserId(String token) {
-        Jwt<Header, Claims> claims;
-        try {
-            claims = Jwts.parserBuilder()
-                    .setSigningKey(secretKey)
-                    .build()
-                    .parseClaimsJwt(token);
-        } catch (Exception ignored) {
-            throw new RuntimeException("INVALID JWT ERROR");
-        }
-
-        return claims.getBody().get("userId", Long.class);
+        return Jwts
+                .parser()
+                .setSigningKey(secretKey)
+                .parseClaimsJws(token)
+                .getBody()
+                .get("userId", Long.class);
     }
 }

@@ -43,4 +43,9 @@ public class FakeExperienceRepository implements ExperienceRepository {
             return experience;
         }
     }
+
+    @Override
+    public Experience findById(long id) {
+        return data.stream().filter(item -> item.getId() == id).findAny().orElse(null);
+    }
 }

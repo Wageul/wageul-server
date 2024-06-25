@@ -1,5 +1,6 @@
 package com.wageul.wageul_server.user.domain;
 
+import com.wageul.wageul_server.user.dto.UserUpdate;
 import lombok.Builder;
 import lombok.Getter;
 
@@ -11,7 +12,16 @@ public class User {
     private String profileImg;
     private String name;
     private String nationality;
-    private String language;
-    private int ageRange;
     private String introduce;
+
+    public User update(UserUpdate userUpdate) {
+        return User.builder()
+                .id(id)
+                .email(email)
+                .profileImg(userUpdate.getProfileImg())
+                .name(userUpdate.getName())
+                .nationality(userUpdate.getNationality())
+                .introduce(userUpdate.getIntroduce())
+                .build();
+    }
 }

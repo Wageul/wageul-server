@@ -2,9 +2,9 @@ package com.wageul.wageul_server.experience.dto;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
+
 import lombok.Builder;
 import lombok.Getter;
-import org.springframework.format.annotation.DateTimeFormat;
 
 import java.time.LocalDateTime;
 import java.time.LocalTime;
@@ -21,6 +21,7 @@ public class ExperienceCreate {
     private final String contact;
     private final int limitMember;
     private final String language;
+    private final long writerId;
 
     @Builder
     public ExperienceCreate(
@@ -32,7 +33,8 @@ public class ExperienceCreate {
             @JsonProperty("cost") int cost,
             @JsonProperty("contact") String contact,
             @JsonProperty("limitMember") int limitMember,
-            @JsonProperty("language") String language) {
+            @JsonProperty("language") String language,
+            @JsonProperty("userId") long writer) {
         this.title = title;
         this.location = location;
         this.datetime = datetime;
@@ -42,5 +44,6 @@ public class ExperienceCreate {
         this.contact = contact;
         this.limitMember = limitMember;
         this.language = language;
+        this.writerId = writer;
     }
 }

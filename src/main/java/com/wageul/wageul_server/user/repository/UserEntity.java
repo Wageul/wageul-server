@@ -25,6 +25,9 @@ public class UserEntity {
     @Column(name = "name")
     private String name;
 
+    @Column(name = "username")
+    private String username;
+
     @Column(name = "nationality")
     private String nationality;
 
@@ -45,8 +48,11 @@ public class UserEntity {
         userEntity.email = user.getEmail();
         userEntity.profileImg = user.getProfileImg();
         userEntity.name = user.getName();
+        userEntity.username = user.getUsername();
         userEntity.nationality = user.getNationality();
         userEntity.introduce = user.getIntroduce();
+        userEntity.createdAt = user.getCreatedAt();
+        userEntity.updatedAt = user.getUpdatedAt();
         return userEntity;
     }
 
@@ -56,8 +62,11 @@ public class UserEntity {
                 .email(email)
                 .profileImg(profileImg)
                 .name(name)
+                .username(username)
                 .nationality(nationality)
                 .introduce(introduce)
+                .createdAt(createdAt)
+                .updatedAt(updatedAt)
                 .build();
     }
 }

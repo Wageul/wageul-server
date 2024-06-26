@@ -1,5 +1,7 @@
 package com.wageul.wageul_server.user.domain;
 
+import java.time.LocalDateTime;
+
 import com.wageul.wageul_server.user.dto.UserUpdate;
 import lombok.Builder;
 import lombok.Getter;
@@ -11,8 +13,11 @@ public class User {
     private final String email;
     private String profileImg;
     private String name;
+    private String username;
     private String nationality;
     private String introduce;
+    private LocalDateTime createdAt;
+    private LocalDateTime updatedAt;
 
     public User update(UserUpdate userUpdate) {
         return User.builder()
@@ -20,8 +25,10 @@ public class User {
                 .email(email)
                 .profileImg(userUpdate.getProfileImg())
                 .name(userUpdate.getName())
+                .username(username)
                 .nationality(userUpdate.getNationality())
                 .introduce(userUpdate.getIntroduce())
+                .createdAt(createdAt)
                 .build();
     }
 }

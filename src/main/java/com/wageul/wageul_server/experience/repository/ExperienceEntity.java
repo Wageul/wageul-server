@@ -1,6 +1,8 @@
 package com.wageul.wageul_server.experience.repository;
 
 import com.wageul.wageul_server.experience.domain.Experience;
+import com.wageul.wageul_server.user.repository.UserEntity;
+
 import jakarta.persistence.*;
 import lombok.Getter;
 import org.springframework.data.annotation.CreatedDate;
@@ -45,6 +47,10 @@ public class ExperienceEntity {
     @Column(name = "language")
     private String language;
 
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    private UserEntity writer;
+
     @CreatedDate
     @Column(name = "created_at")
     private LocalDateTime createdAt;
@@ -65,23 +71,25 @@ public class ExperienceEntity {
         experienceEntity.contact = experience.getContact();
         experienceEntity.limitMember = experience.getLimitMember();
         experienceEntity.language = experience.getLanguage();
+        experienceEntity.writer = UserEntity.from(experience.getWriter());
         return experienceEntity;
     }
 
     public Experience toModel() {
         return Experience.builder()
-                .id(id)
-                .title(title)
-                .location(location)
-                .datetime(datetime)
-                .content(content)
-                .duration(duration)
-                .cost(cost)
-                .contact(contact)
-                .limitMember(limitMember)
-                .language(language)
-                .createdAt(createdAt)
-                .updatedAt(updatedAt)
-                .build();
+            .id(id)
+            .title(title)
+            .location(location)
+            .datetime(datetime)
+            .content(content)
+            .duration(duration)
+            .cost(cost)
+            .contact(contact)
+            .limitMember(limitMember)
+            .language(language)
+            .writer(writer.toModel())
+            .createdAt(createdAt)
+            .updatedAt(updatedAt)
+            .build();
     }
 }

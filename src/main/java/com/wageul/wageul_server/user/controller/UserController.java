@@ -21,8 +21,8 @@ public class UserController {
     private final UserService userService;
 
     @GetMapping("/{userId}")
-    public ResponseEntity<User> getById(@PathVariable("userId") long userId, @CookieValue(value = "token", required = false) String token) {
-        User user = userService.getById(userId, token);
+    public ResponseEntity<User> getById(@PathVariable("userId") long userId) {
+        User user = userService.getById(userId);
         if(user == null) {
             HttpHeaders headers = new HttpHeaders();
             headers.add("Location", "/");
@@ -35,9 +35,8 @@ public class UserController {
     @PutMapping("/{userId}")
     public ResponseEntity<User> update(
             @PathVariable("userId") long userId,
-            @CookieValue("token") String token,
             @RequestBody UserUpdate userUpdate) {
-        User user = userService.getById(userId, token);
+        User user = userService.getById(userId);
         user = userService.update(user, userUpdate);
         return ResponseEntity.ok().body(user);
     }

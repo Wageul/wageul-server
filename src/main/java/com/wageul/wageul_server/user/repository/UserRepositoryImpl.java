@@ -19,6 +19,16 @@ public class UserRepositoryImpl implements UserRepository {
     }
 
     @Override
+    public Optional<User> findByUsername(String username) {
+        return userJpaRepository.findByUsername(username).map(UserEntity::toModel);
+    }
+
+    @Override
+    public User getById(long id) {
+        return findById(id).orElseThrow(() -> new RuntimeException("users 에서 id를 찾을 수 없습니다."));
+    }
+
+    @Override
     public Optional<User> findById(long id) {
         return userJpaRepository.findById(id).map(UserEntity::toModel);
     }

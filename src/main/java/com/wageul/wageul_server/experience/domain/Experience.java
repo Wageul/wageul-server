@@ -1,6 +1,9 @@
 package com.wageul.wageul_server.experience.domain;
 
 import com.wageul.wageul_server.experience.dto.ExperienceCreate;
+import com.wageul.wageul_server.experience.dto.ExperienceUpdate;
+import com.wageul.wageul_server.user.domain.User;
+
 import lombok.Builder;
 import lombok.Getter;
 
@@ -20,10 +23,11 @@ public class Experience {
     private String contact;
     private int limitMember;
     private String language;
+    private User writer;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
 
-    public static Experience from(ExperienceCreate experienceCreate) {
+    public static Experience from(User writer, ExperienceCreate experienceCreate) {
         return Experience.builder()
                 .title(experienceCreate.getTitle())
                 .location(experienceCreate.getLocation())
@@ -34,6 +38,22 @@ public class Experience {
                 .contact(experienceCreate.getContact())
                 .limitMember(experienceCreate.getLimitMember())
                 .language(experienceCreate.getLanguage())
+                .writer(writer)
                 .build();
+    }
+
+    public Experience update(ExperienceUpdate experienceUpdate) {
+        return Experience.builder()
+            .title(experienceUpdate.getTitle())
+            .location(experienceUpdate.getLocation())
+            .datetime(experienceUpdate.getDatetime())
+            .content(experienceUpdate.getContent())
+            .duration(experienceUpdate.getDuration())
+            .cost(experienceUpdate.getCost())
+            .contact(experienceUpdate.getContact())
+            .limitMember(experienceUpdate.getLimitMember())
+            .language(experienceUpdate.getLanguage())
+            .writer(writer)
+            .build();
     }
 }

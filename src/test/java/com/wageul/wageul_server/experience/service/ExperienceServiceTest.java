@@ -1,7 +1,14 @@
 package com.wageul.wageul_server.experience.service;
 
 import com.wageul.wageul_server.experience.domain.Experience;
+import com.wageul.wageul_server.experience.dto.ExperienceCreate;
+import com.wageul.wageul_server.experience.dto.ExperienceUpdate;
+import com.wageul.wageul_server.mock.FakeAuthorizationUtil;
 import com.wageul.wageul_server.mock.FakeExperienceRepository;
+import com.wageul.wageul_server.mock.FakeUserRepository;
+import com.wageul.wageul_server.user.domain.User;
+import com.wageul.wageul_server.user.service.port.UserRepository;
+
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -15,16 +22,23 @@ import static org.junit.jupiter.api.Assertions.*;
 class ExperienceServiceTest {
 
     ExperienceService experienceService;
+    UserRepository userRepository = new FakeUserRepository();
+    long userId = 1L;
 
     @BeforeEach
     void init() {
-        experienceService = new ExperienceService(new FakeExperienceRepository());
+        experienceService = new ExperienceService(new FakeExperienceRepository(), userRepository, new FakeAuthorizationUtil(userId));
     }
 
     @Test
     void 체험전체조회() {
         // given
-        Experience experience = Experience.builder()
+        User user = User.builder()
+            .id(userId)
+            .email("abc@gmail.com")
+            .build();
+        userRepository.save(user);
+        ExperienceCreate experience = ExperienceCreate.builder()
                 .title("title")
                 .location("location")
                 .datetime(LocalDateTime.of(2024, 6, 25, 16, 41, 0))
@@ -50,7 +64,12 @@ class ExperienceServiceTest {
     @Test
     void 체험생성() {
         // given
-        Experience experience = Experience.builder()
+        User user = User.builder()
+            .id(userId)
+            .email("abc@gmail.com")
+            .build();
+        userRepository.save(user);
+        ExperienceCreate experience = ExperienceCreate.builder()
                 .title("title")
                 .location("location")
                 .datetime(LocalDateTime.of(2024, 6, 25, 16, 41, 0))
@@ -80,7 +99,12 @@ class ExperienceServiceTest {
     @Test
     void 체험하나조회() {
         // given
-        Experience experience = Experience.builder()
+        User user = User.builder()
+            .id(userId)
+            .email("abc@gmail.com")
+            .build();
+        userRepository.save(user);
+        ExperienceCreate experience = ExperienceCreate.builder()
                 .title("title")
                 .location("location")
                 .datetime(LocalDateTime.of(2024, 6, 25, 16, 41, 0))
@@ -94,7 +118,7 @@ class ExperienceServiceTest {
 
         // when
         experienceService.create(experience);
-        Experience experience1 = experienceService.getById(1);
+        Experience experience1 = experienceService.getById(userId);
 
         // then
         Assertions.assertThat(experience1.getTitle()).isEqualTo("title");
@@ -106,5 +130,52 @@ class ExperienceServiceTest {
         Assertions.assertThat(experience1.getContact()).isEqualTo("contact");
         Assertions.assertThat(experience1.getLimitMember()).isEqualTo(15);
         Assertions.assertThat(experience1.getLanguage()).isEqualTo("language");
+    }
+
+    @Test
+    void 체험하나수정() {
+        // given
+        User user = User.builder()
+            .id(userId)
+            .email("abc@gmail.com")
+            .build();
+        userRepository.save(user);
+        ExperienceCreate experience = ExperienceCreate.builder()
+            .title("title")
+            .location("location")
+            .datetime(LocalDateTime.of(2024, 6, 25, 16, 41, 0))
+            .content("content")
+            .duration(LocalTime.of(4, 0, 0))
+            .cost(10000)
+            .contact("contact")
+            .limitMember(15)
+            .language("language")
+            .build();
+        Experience experience1 = experienceService.create(experience);
+        ExperienceUpdate experienceUpdate = ExperienceUpdate.builder()
+            .title("i am wonchae")
+            .location("hello world")
+            .datetime(LocalDateTime.of(2024, 6, 25, 16, 41, 0))
+            .content("content")
+            .duration(LocalTime.of(4, 0, 0))
+            .cost(10000)
+            .contact("contact")
+            .limitMember(15)
+            .language("language")
+            .build();
+
+        // when
+        Experience updatedExperience = experienceService.update(experience1.getId(), experienceUpdate);
+
+        // then
+        Assertions.assertThat(updatedExperience.getTitle()).isEqualTo("i am wonchae");
+        Assertions.assertThat(updatedExperience.getLocation()).isEqualTo("hello world");
+        Assertions.assertThat(updatedExperience.getDatetime()).isEqualTo(LocalDateTime.of(2024, 6, 25, 16, 41, 0));
+        Assertions.assertThat(updatedExperience.getContent()).isEqualTo("content");
+        Assertions.assertThat(updatedExperience.getDuration()).isEqualTo(LocalTime.of(4, 0, 0));
+        Assertions.assertThat(updatedExperience.getCost()).isEqualTo(10000);
+        Assertions.assertThat(updatedExperience.getContact()).isEqualTo("contact");
+        Assertions.assertThat(updatedExperience.getLimitMember()).isEqualTo(15);
+        Assertions.assertThat(updatedExperience.getLanguage()).isEqualTo("language");
     }
 }

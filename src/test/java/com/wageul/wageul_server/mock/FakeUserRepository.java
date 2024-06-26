@@ -19,6 +19,16 @@ public class FakeUserRepository implements UserRepository {
     }
 
     @Override
+    public Optional<User> findByUsername(String username) {
+        return data.stream().filter(item -> item.getUsername().equals(username)).findAny();
+    }
+
+    @Override
+    public User getById(long id) {
+        return findById(id).orElseThrow(() -> new RuntimeException("users에 id가 일치하는 것이 없습니다."));
+    }
+
+    @Override
     public Optional<User> findById(long id) {
         return data.stream().filter(item -> item.getId() == id).findAny();
     }

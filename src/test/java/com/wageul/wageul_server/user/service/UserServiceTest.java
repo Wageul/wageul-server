@@ -1,6 +1,6 @@
 package com.wageul.wageul_server.user.service;
 
-import com.wageul.wageul_server.common.JwtTokenGenerator;
+import com.wageul.wageul_server.mock.FakeAuthorizationUtil;
 import com.wageul.wageul_server.user.domain.User;
 import com.wageul.wageul_server.user.dto.UserUpdate;
 import com.wageul.wageul_server.mock.FakeUserRepository;
@@ -12,7 +12,7 @@ class UserServiceTest {
     @Test
     void 회원정보_수정() {
         // given
-        UserService userService = new UserService(new FakeUserRepository(), new JwtTokenGenerator());
+        UserService userService = new UserService(new FakeUserRepository(), new FakeAuthorizationUtil(1L));
         User user = User.builder()
                 .id(1)
                 .email("ywonchae62@gmail.com")

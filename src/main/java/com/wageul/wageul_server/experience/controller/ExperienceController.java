@@ -2,7 +2,9 @@ package com.wageul.wageul_server.experience.controller;
 
 import com.wageul.wageul_server.experience.domain.Experience;
 import com.wageul.wageul_server.experience.dto.ExperienceCreate;
+import com.wageul.wageul_server.experience.dto.ExperienceUpdate;
 import com.wageul.wageul_server.experience.service.ExperienceService;
+
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpHeaders;
@@ -30,24 +32,37 @@ public class ExperienceController {
 
     @PostMapping("")
     public ResponseEntity<Experience> create(
-            @CookieValue("token") String token,
-            @RequestBody ExperienceCreate experienceCreate) {
-        if(token == null) {
+        @CookieValue("token") String token,
+        @RequestBody ExperienceCreate experienceCreate) {
+        if (token == null) {
             HttpHeaders headers = new HttpHeaders();
             headers.add("Location", "/");
             return new ResponseEntity<Experience>(headers, HttpStatus.FOUND);
         }
-        Experience experience = Experience.from(experienceCreate);
-        experience = experienceService.create(experience);
+        Experience experience = experienceService.create(experienceCreate);
         return ResponseEntity.ok().body(experience);
     }
 
     @GetMapping("/{experienceId}")
     public ResponseEntity<Experience> getById(@PathVariable("experienceId") long experienceId) {
         Experience experience = experienceService.getById(experienceId);
-        if(experience == null) {
+        if (experience == null) {
             return ResponseEntity.notFound().build();
         }
+        return ResponseEntity.ok().body(experience);
+    }
+
+    @PutMapping("/{experienceId}")
+    public ResponseEntity<Experience> update(
+        @PathVariable("experienceId") long experienceId,
+        @CookieValue("token") String token,
+        @RequestBody ExperienceUpdate experienceUpdate) {
+        if (token == null) {
+            HttpHeaders headers = new HttpHeaders();
+            headers.add("Location", "/");
+            return new ResponseEntity<Experience>(headers, HttpStatus.FOUND);
+        }
+        Experience experience = experienceService.update(experienceId, experienceUpdate);
         return ResponseEntity.ok().body(experience);
     }
 }

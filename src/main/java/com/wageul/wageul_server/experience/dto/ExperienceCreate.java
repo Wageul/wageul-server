@@ -27,9 +27,9 @@ public class ExperienceCreate {
     public ExperienceCreate(
             @JsonProperty("title") String title,
             @JsonProperty("location") String location,
-            @JsonProperty("datetime") @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm", timezone = "Asia/Seoul") LocalDateTime datetime,
+            @JsonProperty("datetime") LocalDateTime datetime,
             @JsonProperty("content") String content,
-            @JsonProperty("duration") @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "HH:mm", timezone = "Asia/Seoul") LocalTime duration,
+            @JsonProperty("duration") LocalTime duration,
             @JsonProperty("cost") int cost,
             @JsonProperty("contact") String contact,
             @JsonProperty("limitMember") int limitMember,

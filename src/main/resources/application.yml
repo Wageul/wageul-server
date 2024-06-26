@@ -17,14 +17,25 @@ spring:
     open-in-view: false
     generate-ddl: true
 
-google:
-  client-id: ${GOOGLE_CLIENT_ID}
-  client-secret: ${GOOGLE_CLIENT_SECRET}
-  redirect-uri: ${GOOGLE_REDIRECT_URL}
-  authorization-code: ${GOOGLE_AUTH_CODE}
-  access-token-url: https://oauth2.googleapis.com/token
-  profile-url: https://www.googleapis.com/userinfo/v2/me
+#registration
+  security:
+    oauth2:
+      client:
+        registration:
+          google:
+            client-name: google
+            client-id: ${GOOGLE_CLIENT_ID}
+            client-secret: ${GOOGLE_CLIENT_SECRET}
+            redirect-uri: ${GOOGLE_REDIRECT_URL}
+            authorization-code: ${GOOGLE_AUTH_CODE}
+            scope: profile,email
+            access-token-url: https://oauth2.googleapis.com/token
+            profile-url: https://www.googleapis.com/userinfo/v2/me
 
-jwt:
-  secret-key: ${JWT_SECRET}
-  expire-length: 86400000
+  # jwt
+  jwt:
+    secret: ${JWT_SECRET}
+    expire-length: 86400000
+
+  client:
+    url: http://localhost:3000

@@ -3,6 +3,7 @@ package com.wageul.wageul_server.experience.service.port;
 import com.wageul.wageul_server.experience.domain.Experience;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface ExperienceRepository {
 
@@ -10,7 +11,7 @@ public interface ExperienceRepository {
 
     Experience save(Experience experience);
 
-    Experience findById(long id);
+    Optional<Experience> findById(long id);
 
     public void deleteById(long id);
 }

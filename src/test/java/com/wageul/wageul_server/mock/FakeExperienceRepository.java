@@ -7,6 +7,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 
 public class FakeExperienceRepository implements ExperienceRepository {
 
@@ -46,8 +47,8 @@ public class FakeExperienceRepository implements ExperienceRepository {
     }
 
     @Override
-    public Experience findById(long id) {
-        return data.stream().filter(item -> item.getId() == id).findAny().orElse(null);
+    public Optional<Experience> findById(long id) {
+        return data.stream().filter(item -> item.getId() == id).findAny();
     }
 
     @Override

@@ -6,6 +6,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 @RequiredArgsConstructor
@@ -24,8 +25,8 @@ public class ExperienceRepositoryImpl implements ExperienceRepository {
     }
 
     @Override
-    public Experience findById(long id) {
-        return experienceJpaRepository.findById(id).map(ExperienceEntity::toModel).orElse(null);
+    public Optional<Experience> findById(long id) {
+        return experienceJpaRepository.findById(id).map(ExperienceEntity::toModel);
     }
 
     public void deleteById(long id) {

@@ -3,6 +3,7 @@ package com.wageul.wageul_server.experience.service;
 import com.wageul.wageul_server.experience.domain.Experience;
 import com.wageul.wageul_server.experience.dto.ExperienceCreate;
 import com.wageul.wageul_server.experience.dto.ExperienceUpdate;
+import com.wageul.wageul_server.experience.service.port.ExperienceRepository;
 import com.wageul.wageul_server.mock.FakeAuthorizationUtil;
 import com.wageul.wageul_server.mock.FakeExperienceRepository;
 import com.wageul.wageul_server.mock.FakeUserRepository;
@@ -22,12 +23,16 @@ import static org.junit.jupiter.api.Assertions.*;
 class ExperienceServiceTest {
 
     ExperienceService experienceService;
+    ExperienceRepository experienceRepository = new FakeExperienceRepository();
     UserRepository userRepository = new FakeUserRepository();
     long userId = 1L;
 
     @BeforeEach
     void init() {
-        experienceService = new ExperienceService(new FakeExperienceRepository(), userRepository, new FakeAuthorizationUtil(userId));
+        experienceService = new ExperienceService(
+            experienceRepository,
+            userRepository,
+            new FakeAuthorizationUtil(userId));
     }
 
     @Test
@@ -94,6 +99,7 @@ class ExperienceServiceTest {
         Assertions.assertThat(newExperience.getContact()).isEqualTo("contact");
         Assertions.assertThat(newExperience.getLimitMember()).isEqualTo(15);
         Assertions.assertThat(newExperience.getLanguage()).isEqualTo("language");
+        Assertions.assertThat(newExperience.getWriter().getEmail()).isEqualTo("abc@gmail.com");
     }
 
     @Test
@@ -130,6 +136,7 @@ class ExperienceServiceTest {
         Assertions.assertThat(experience1.getContact()).isEqualTo("contact");
         Assertions.assertThat(experience1.getLimitMember()).isEqualTo(15);
         Assertions.assertThat(experience1.getLanguage()).isEqualTo("language");
+        Assertions.assertThat(experience1.getWriter().getEmail()).isEqualTo("abc@gmail.com");
     }
 
     @Test
@@ -177,5 +184,71 @@ class ExperienceServiceTest {
         Assertions.assertThat(updatedExperience.getContact()).isEqualTo("contact");
         Assertions.assertThat(updatedExperience.getLimitMember()).isEqualTo(15);
         Assertions.assertThat(updatedExperience.getLanguage()).isEqualTo("language");
+        Assertions.assertThat(updatedExperience.getWriter().getEmail()).isEqualTo("abc@gmail.com");
+    }
+
+    @Test
+    void 체험삭제() {
+        // given
+        User user = User.builder()
+            .id(userId)
+            .email("abc@gmail.com")
+            .build();
+        userRepository.save(user);
+        ExperienceCreate experience = ExperienceCreate.builder()
+            .title("title")
+            .location("location")
+            .datetime(LocalDateTime.of(2024, 6, 25, 16, 41, 0))
+            .content("content")
+            .duration(LocalTime.of(4, 0, 0))
+            .cost(10000)
+            .contact("contact")
+            .limitMember(15)
+            .language("language")
+            .build();
+        Experience experience1 = experienceService.create(experience);
+
+        // when
+        experienceService.delete(experience1.getId());
+
+        // then
+        Assertions.assertThat(experienceService.getById(experience1.getId())).isNull();
+    }
+
+    @Test
+    void 체험삭제는작성자만() {
+        // given
+        User user = User.builder()
+            .id(userId)
+            .email("abc@gmail.com")
+            .build();
+        userRepository.save(user);
+        User user2 = User.builder()
+            .id(2L)
+            .email("abc@gmail.com")
+            .build();
+        userRepository.save(user2);
+        ExperienceCreate experience = ExperienceCreate.builder()
+            .title("title")
+            .location("location")
+            .datetime(LocalDateTime.of(2024, 6, 25, 16, 41, 0))
+            .content("content")
+            .duration(LocalTime.of(4, 0, 0))
+            .cost(10000)
+            .contact("contact")
+            .limitMember(15)
+            .language("language")
+            .build();
+        Experience experience1 = experienceService.create(experience);
+
+        // when
+        experienceService = new ExperienceService(
+            experienceRepository,
+            userRepository,
+            new FakeAuthorizationUtil(2L));
+        experienceService.delete(experience1.getId());
+
+        // then
+        Assertions.assertThat(experienceService.getById(experience1.getId())).isNotNull();
     }
 }

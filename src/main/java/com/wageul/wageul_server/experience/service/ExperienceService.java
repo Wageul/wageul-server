@@ -12,6 +12,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -28,19 +29,31 @@ public class ExperienceService {
         return experienceRepository.findAll();
     }
 
+    @Transactional
     public Experience create(ExperienceCreate experienceCreate) {
         User writer = userRepository.getById(authorizationUtil.getLoginUserId());
         Experience experience = Experience.from(writer, experienceCreate);
-        return experienceRepository.save(experience);
+        experience = experienceRepository.save(experience);
+        return experience;
     }
 
     public Experience getById(long id) {
         return experienceRepository.findById(id);
     }
 
+    @Transactional
 	public Experience update(long id, ExperienceUpdate experienceUpdate) {
         Experience experience = getById(id);
         experience = experience.update(experienceUpdate);
         return experienceRepository.save(experience);
 	}
+
+    @Transactional
+    public void delete(long id) {
+        User writer = userRepository.getById(authorizationUtil.getLoginUserId());
+        Experience experience = getById(id);
+        if(experience.getWriter().equals(writer)) {
+            experienceRepository.deleteById(id);
+        }
+    }
 }

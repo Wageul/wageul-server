@@ -25,9 +25,9 @@ public class ExperienceController {
     private final ExperienceService experienceService;
 
     @GetMapping("")
-    public ResponseEntity<List<Experience>> getAll() {
+    public List<Experience> getAll() {
         List<Experience> experiences = experienceService.getAll();
-        return ResponseEntity.ok().body(experiences);
+        return experiences;
     }
 
     @PostMapping("")
@@ -44,12 +44,12 @@ public class ExperienceController {
     }
 
     @GetMapping("/{experienceId}")
-    public ResponseEntity<Experience> getById(@PathVariable("experienceId") long experienceId) {
+    public Experience getById(@PathVariable("experienceId") long experienceId) {
         Experience experience = experienceService.getById(experienceId);
         if (experience == null) {
-            return ResponseEntity.notFound().build();
+            return null;
         }
-        return ResponseEntity.ok().body(experience);
+        return experience;
     }
 
     @PutMapping("/{experienceId}")
@@ -64,5 +64,10 @@ public class ExperienceController {
         }
         Experience experience = experienceService.update(experienceId, experienceUpdate);
         return ResponseEntity.ok().body(experience);
+    }
+
+    @DeleteMapping("/{experienceId}")
+    public void delete(@PathVariable("experienceId") long experienceId) {
+        experienceService.delete(experienceId);
     }
 }

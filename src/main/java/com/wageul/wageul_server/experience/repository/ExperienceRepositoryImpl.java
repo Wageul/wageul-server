@@ -27,4 +27,8 @@ public class ExperienceRepositoryImpl implements ExperienceRepository {
     public Experience findById(long id) {
         return experienceJpaRepository.findById(id).map(ExperienceEntity::toModel).orElse(null);
     }
+
+    public void deleteById(long id) {
+        experienceJpaRepository.deleteById(id);
+    }
 }

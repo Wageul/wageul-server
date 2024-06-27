@@ -32,6 +32,7 @@ public class FakeExperienceRepository implements ExperienceRepository {
                     .contact(experience.getContact())
                     .limitMember(experience.getLimitMember())
                     .language(experience.getLanguage())
+                    .writer(experience.getWriter())
                     .createdAt(LocalDateTime.now())
                     .updatedAt(LocalDateTime.now())
                     .build();
@@ -47,5 +48,10 @@ public class FakeExperienceRepository implements ExperienceRepository {
     @Override
     public Experience findById(long id) {
         return data.stream().filter(item -> item.getId() == id).findAny().orElse(null);
+    }
+
+    @Override
+    public void deleteById(long id) {
+        data.removeIf(item -> item.getId() == id);
     }
 }

@@ -4,7 +4,9 @@ import com.wageul.wageul_server.experience.domain.Experience;
 import com.wageul.wageul_server.user.repository.UserEntity;
 
 import jakarta.persistence.*;
-import lombok.Getter;
+
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
@@ -49,6 +51,7 @@ public class ExperienceEntity {
 
     @ManyToOne
     @JoinColumn(name = "user_id")
+    @OnDelete(action = OnDeleteAction.CASCADE)
     private UserEntity writer;
 
     @CreatedDate
@@ -72,6 +75,8 @@ public class ExperienceEntity {
         experienceEntity.limitMember = experience.getLimitMember();
         experienceEntity.language = experience.getLanguage();
         experienceEntity.writer = UserEntity.from(experience.getWriter());
+        experienceEntity.createdAt = experience.getCreatedAt();
+        experienceEntity.updatedAt = experience.getUpdatedAt();
         return experienceEntity;
     }
 

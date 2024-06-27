@@ -16,7 +16,6 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @Slf4j
-@Controller
 @RestController
 @RequestMapping("/api/experience")
 @RequiredArgsConstructor

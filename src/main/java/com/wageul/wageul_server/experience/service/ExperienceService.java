@@ -38,7 +38,7 @@ public class ExperienceService {
     }
 
     public Experience getById(long id) {
-        return experienceRepository.findById(id);
+        return experienceRepository.findById(id).orElse(null);
     }
 
     @Transactional

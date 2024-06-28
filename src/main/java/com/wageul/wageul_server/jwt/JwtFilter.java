@@ -30,12 +30,14 @@ public class JwtFilter extends OncePerRequestFilter {
 		String requestUri = request.getRequestURI();
 
 		if (requestUri.matches("^\\/login(?:\\/.*)?$")) {
-
 			filterChain.doFilter(request, response);
 			return;
 		}
 		if (requestUri.matches("^\\/oauth2(?:\\/.*)?$")) {
-
+			filterChain.doFilter(request, response);
+			return;
+		}
+		if (requestUri.matches("/api/experience")) {
 			filterChain.doFilter(request, response);
 			return;
 		}
@@ -43,11 +45,13 @@ public class JwtFilter extends OncePerRequestFilter {
 		//cookie들을 불러온 뒤 token Key에 담긴 쿠키를 찾음
 		String authorization = null;
 		Cookie[] cookies = request.getCookies();
-		for (Cookie cookie : cookies) {
-			log.info("cookie name is ! {}", cookie.getName());
-			if (cookie.getName().equals("token")) {
-				log.info("cookie value is ! {}", cookie.getValue());
-				authorization = cookie.getValue();
+		if (cookies != null) {
+			for (Cookie cookie : cookies) {
+				log.info("cookie name is ! {}", cookie.getName());
+				if (cookie.getName().equals("token")) {
+					log.info("cookie value is ! {}", cookie.getValue());
+					authorization = cookie.getValue();
+				}
 			}
 		}
 

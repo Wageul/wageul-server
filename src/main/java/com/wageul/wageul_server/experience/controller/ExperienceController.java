@@ -17,19 +17,19 @@ import java.util.List;
 
 @Slf4j
 @RestController
-@RequestMapping("/api/experience")
+@RequestMapping(value = "/api/experience", produces = "application/json")
 @RequiredArgsConstructor
 public class ExperienceController {
 
     private final ExperienceService experienceService;
 
-    @GetMapping("")
+    @GetMapping
     public List<Experience> getAll() {
         List<Experience> experiences = experienceService.getAll();
         return experiences;
     }
 
-    @PostMapping("")
+    @PostMapping
     public ResponseEntity<Experience> create(
         @CookieValue("token") String token,
         @RequestBody ExperienceCreate experienceCreate) {

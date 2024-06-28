@@ -12,7 +12,7 @@ import lombok.RequiredArgsConstructor;
 
 @Repository
 @RequiredArgsConstructor
-public class ParticipationRepositoryImpl implements ParticipationRepository {
+public class ParticipationRepositoryImpl extends ParticipationCustomRepositoryImpl implements ParticipationRepository {
 
 	private final ParticipationJpaRepository participationJpaRepository;
 

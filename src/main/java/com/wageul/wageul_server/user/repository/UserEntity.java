@@ -2,6 +2,7 @@ package com.wageul.wageul_server.user.repository;
 
 import com.wageul.wageul_server.user.domain.User;
 import jakarta.persistence.*;
+
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;

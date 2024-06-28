@@ -1,6 +1,9 @@
 package com.wageul.wageul_server.participation.service;
 
+import java.util.List;
+
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.wageul.wageul_server.experience.domain.Experience;
 import com.wageul.wageul_server.experience.service.port.ExperienceRepository;
@@ -30,5 +33,12 @@ public class ParticipationService {
 			return participationRepository.save(participation);
 		}
 		return null;
+	}
+
+	@Transactional
+	public List<Participation> getAll() {
+		long loginUserId = authorizationUtil.getLoginUserId();
+		User user = userRepository.getById(loginUserId);
+		return participationRepository.findByUser(user);
 	}
 }

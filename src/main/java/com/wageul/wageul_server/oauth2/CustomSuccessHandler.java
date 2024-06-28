@@ -12,6 +12,7 @@ import com.wageul.wageul_server.jwt.JwtUtil;
 import com.wageul.wageul_server.oauth2.dto.CustomOAuth2User;
 
 import jakarta.servlet.ServletException;
+import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
@@ -32,18 +33,6 @@ public class CustomSuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
 	@Value("${spring.jwt.expire-length}")
 	private long expireLong;
 
-	private ResponseCookie createCookie(String key, String value) {
-
-		return ResponseCookie.from(key, value)
-			.path("/")
-			.maxAge(expireInt)
-			.sameSite("None")
-			.httpOnly(true)
-			.secure(true)
-			.domain("localhost")
-			.build();
-	}
-
 	@Override
 	public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response,
 		Authentication authentication) throws IOException, ServletException {
@@ -57,7 +46,19 @@ public class CustomSuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
 
 		String token = jwtUtil.createJwt(userId, expireLong);
 
-		response.addHeader("Set-Cookie", createCookie("token", token).toString());
+		response.addCookie(createCookie("token", token));
 		response.sendRedirect(clientUrl);
+	}
+
+	private Cookie createCookie(String key, String value) {
+
+		Cookie cookie = new Cookie(key, value);
+		cookie.setMaxAge(expireInt);
+		cookie.setSecure(true);
+		cookie.setPath("/");
+		cookie.setDomain("localhost");
+		cookie.setHttpOnly(true);
+
+		return cookie;
 	}
 }

@@ -38,7 +38,7 @@ spring:
     expire-length: 86400000
 
   client:
-    url: http://localhost.com:3000
+    url: http://m.hello.wageul.o-r.kr:3000
 
   servlet:
     session:

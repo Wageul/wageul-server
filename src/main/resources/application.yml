@@ -43,5 +43,5 @@ spring:
   servlet:
     session:
       cookie:
-        same-site: none
+        same-site: None
         secure: true

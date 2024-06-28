@@ -39,3 +39,9 @@ spring:
 
   client:
     url: http://localhost:3000
+
+  servlet:
+    session:
+      cookie:
+        same-site: none
+        secure: true

@@ -39,9 +39,3 @@ spring:
 
   client:
     url: http://m.hello.wageul.o-r.kr:3000
-
-  servlet:
-    session:
-      cookie:
-        same-site: none
-        secure: true

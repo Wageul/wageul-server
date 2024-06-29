@@ -41,4 +41,14 @@ public class ParticipationService {
 		User user = userRepository.getById(loginUserId);
 		return participationRepository.findByUser(user);
 	}
+
+	@Transactional
+	public void delete(long id) {
+		Participation participation = participationRepository.findById(id).orElse(null);
+		long loginUserId = authorizationUtil.getLoginUserId();
+		User user = userRepository.getById(loginUserId);
+		// 체험을 신청한 당사자만 삭제 가능
+		if (participation != null && participation.getUser().equals(user))
+			participationRepository.delete(participation);
+	}
 }

@@ -1,18 +1,34 @@
 package com.wageul.wageul_server.user.service;
 
 import com.wageul.wageul_server.mock.FakeAuthorizationUtil;
+import com.wageul.wageul_server.oauth2.AuthorizationUtil;
 import com.wageul.wageul_server.user.domain.User;
 import com.wageul.wageul_server.user.dto.UserUpdate;
 import com.wageul.wageul_server.mock.FakeUserRepository;
+import com.wageul.wageul_server.user.service.port.UserRepository;
+
 import org.assertj.core.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 class UserServiceTest {
 
+    private UserService userService;
+    private UserRepository fakeUserRepository;
+    private AuthorizationUtil fakeAuthorizationUtil;
+
+    @BeforeEach
+    void init() {
+        fakeUserRepository = new FakeUserRepository();
+        fakeAuthorizationUtil = new FakeAuthorizationUtil(1L);
+        userService = new UserService(
+            fakeUserRepository,
+            fakeAuthorizationUtil);
+    }
+
     @Test
     void 회원정보_수정() {
         // given
-        UserService userService = new UserService(new FakeUserRepository(), new FakeAuthorizationUtil(1L));
         User user = User.builder()
                 .id(1)
                 .email("ywonchae62@gmail.com")
@@ -34,5 +50,30 @@ class UserServiceTest {
         Assertions.assertThat(updatedUser.getProfileImg()).isEqualTo("haha.png");
         Assertions.assertThat(updatedUser.getNationality()).isEqualTo("Korea");
         Assertions.assertThat(updatedUser.getIntroduce()).isEqualTo("hello world~");
+    }
+
+    @Test
+    void 로그인한_회원정보_가져오기() {
+        // given
+        User user = User.builder()
+            .id(1)
+            .email("ywonchae62@gmail.com")
+            .profileImg("abc.png")
+            .name("wonchae")
+            .nationality("Korea")
+            .introduce("")
+            .build();
+
+        fakeUserRepository.save(user);
+
+        // when
+        User myInfo = userService.getMyInfo(1L);
+
+        // then
+        Assertions.assertThat(myInfo.getEmail()).isEqualTo("ywonchae62@gmail.com");
+        Assertions.assertThat(myInfo.getProfileImg()).isEqualTo("abc.png");
+        Assertions.assertThat(myInfo.getName()).isEqualTo("wonchae");
+        Assertions.assertThat(myInfo.getNationality()).isEqualTo("Korea");
+        Assertions.assertThat(myInfo.getIntroduce()).isEqualTo("");
     }
 }

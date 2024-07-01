@@ -47,7 +47,7 @@ public class CustomSuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
 
 		log.info("[jwt] {}", token);
 
-		response.addHeader("Set-Cookie", createCookie("token", token).toString());
+		response.addHeader("Cookie", createCookie("token", token).toString());
 		response.addHeader("Access-Control-Allow-Credentials", "true");
 		response.setHeader("Access-Control-Allow-Origin", "*");
 		response.sendRedirect(clientUrl);
@@ -57,10 +57,10 @@ public class CustomSuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
 
 		ResponseCookie cookie = ResponseCookie.from(key, value)
 				.path("/")
+				.secure(true)
 				.sameSite("None")
 				.httpOnly(true)
-				.secure(true)
-				// .domain("localhost")
+				.domain("localhost")
 				.maxAge(expireInt)
 				.build();
 

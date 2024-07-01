@@ -23,7 +23,7 @@ import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @RestController
-@RequestMapping(value = "/api/participation", produces = "application/json")
+@RequestMapping("/api/participation")
 @RequiredArgsConstructor
 public class ParticipationController {
 

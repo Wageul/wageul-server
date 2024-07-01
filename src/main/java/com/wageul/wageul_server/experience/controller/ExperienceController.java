@@ -17,7 +17,7 @@ import java.util.List;
 
 @Slf4j
 @RestController
-@RequestMapping(value = "/api/experience", produces = "application/json")
+@RequestMapping("/api/experience")
 @RequiredArgsConstructor
 public class ExperienceController {
 

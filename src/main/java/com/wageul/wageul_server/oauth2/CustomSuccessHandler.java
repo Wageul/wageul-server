@@ -12,7 +12,6 @@ import com.wageul.wageul_server.jwt.JwtUtil;
 import com.wageul.wageul_server.oauth2.dto.CustomOAuth2User;
 
 import jakarta.servlet.ServletException;
-import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
@@ -46,17 +45,20 @@ public class CustomSuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
 
 		String token = jwtUtil.createJwt(userId, expireLong);
 
-		response.addCookie(createCookie("token", token));
+		response.addHeader("Set-Cookie", createCookie("token", token).toString());
 		response.sendRedirect(clientUrl);
 	}
 
-	private Cookie createCookie(String key, String value) {
+	private ResponseCookie createCookie(String key, String value) {
 
-		Cookie cookie = new Cookie(key, value);
-		cookie.setMaxAge(expireInt);
-		// cookie.setSecure(true);
-		cookie.setPath("/");
-		cookie.setHttpOnly(true);
+		ResponseCookie cookie = ResponseCookie.from(key, value)
+				.path("/")
+				.sameSite("None")
+				.httpOnly(true)
+				.secure(true)
+				.domain(clientUrl)
+				.maxAge(expireInt)
+				.build();
 
 		return cookie;
 	}

@@ -45,6 +45,8 @@ public class CustomSuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
 
 		String token = jwtUtil.createJwt(userId, expireLong);
 
+		log.info("[jwt] {}", token);
+
 		response.addHeader("Set-Cookie", createCookie("token", token).toString());
 		response.addHeader("Access-Control-Allow-Credentials", "true");
 		response.setHeader("Access-Control-Allow-Origin", "*");

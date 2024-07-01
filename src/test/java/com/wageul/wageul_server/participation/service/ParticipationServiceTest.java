@@ -67,4 +67,36 @@ class ParticipationServiceTest {
 		Assertions.assertThat(participation.getExperience()).isEqualTo(experience);
 	}
 
+	@Test
+	void 체험신청취소() {
+		// given
+		User user = User.builder()
+			.id(1L)
+			.email("abc@gmail.com")
+			.name("test")
+			.build();
+
+		fakeUserRepository.save(user);
+
+		Experience experience = Experience.builder()
+			.id(1L)
+			.title("experience!")
+			.content("new experience")
+			.build();
+
+		fakeExperienceRepository.save(experience);
+
+		ParticipationCreate participationCreate = ParticipationCreate.builder()
+			.experienceId(experience.getId())
+			.build();
+
+		Participation participation = participationService.create(participationCreate);
+
+		// when
+		participationService.delete(participation.getId());
+
+		// then
+		Assertions.assertThat(participationService.getAll().size()).isEqualTo(0);
+	}
+
 }

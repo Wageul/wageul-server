@@ -19,9 +19,13 @@ public class UserService {
     private final AuthorizationUtil authorizationUtil;
 
     public User getById(long id) {
+        return userRepository.findById(id).orElse(null);
+    }
+
+    public User getMyInfo(long loginId) {
         long userId = authorizationUtil.getLoginUserId();
-        if(userId == id) {
-            return userRepository.findById(id).orElse(null);
+        if(userId == loginId) {
+            return userRepository.findById(loginId).orElse(null);
         } else {
             return null;
         }

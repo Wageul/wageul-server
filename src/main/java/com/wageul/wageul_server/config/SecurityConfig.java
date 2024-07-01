@@ -10,6 +10,7 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.oauth2.client.web.OAuth2LoginAuthenticationFilter;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 
@@ -34,6 +35,7 @@ public class SecurityConfig {
 	private String clientUrl;
 
 	@Bean
+	@CrossOrigin(origins = "http://localhost:3000")
 	public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
 
 		http

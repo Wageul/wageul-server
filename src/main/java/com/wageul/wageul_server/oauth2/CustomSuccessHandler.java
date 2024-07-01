@@ -47,6 +47,7 @@ public class CustomSuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
 
 		response.addHeader("Set-Cookie", createCookie("token", token).toString());
 		response.addHeader("Access-Control-Allow-Credentials", "true");
+		response.setHeader("Access-Control-Allow-Origin", "*");
 		response.sendRedirect(clientUrl);
 	}
 

@@ -35,7 +35,6 @@ public class SecurityConfig {
 	private String clientUrl;
 
 	@Bean
-	@CrossOrigin(origins = "http://localhost:3000")
 	public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
 
 		http

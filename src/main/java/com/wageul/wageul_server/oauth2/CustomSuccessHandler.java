@@ -56,7 +56,7 @@ public class CustomSuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
 				.sameSite("None")
 				.httpOnly(true)
 				.secure(true)
-				.domain(clientUrl)
+				.domain("localhost")
 				.maxAge(expireInt)
 				.build();
 

@@ -3,7 +3,6 @@ package com.wageul.wageul_server.oauth2;
 import java.io.IOException;
 
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.ResponseCookie;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.web.authentication.SimpleUrlAuthenticationSuccessHandler;
 import org.springframework.stereotype.Component;
@@ -12,6 +11,7 @@ import com.wageul.wageul_server.jwt.JwtUtil;
 import com.wageul.wageul_server.oauth2.dto.CustomOAuth2User;
 
 import jakarta.servlet.ServletException;
+import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
@@ -45,24 +45,17 @@ public class CustomSuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
 
 		String token = jwtUtil.createJwt(userId, expireLong);
 
-		log.info("[jwt] {}", token);
-
-		response.addHeader("Cookie", createCookie("token", token).toString());
-		response.addHeader("Access-Control-Allow-Credentials", "true");
-		response.setHeader("Access-Control-Allow-Origin", "*");
+		response.addCookie(createCookie("token", token));
 		response.sendRedirect(clientUrl);
 	}
 
-	private ResponseCookie createCookie(String key, String value) {
+	private Cookie createCookie(String key, String value) {
 
-		ResponseCookie cookie = ResponseCookie.from(key, value)
-				.path("/")
-				.secure(true)
-				.sameSite("None")
-				.httpOnly(true)
-				.domain("localhost")
-				.maxAge(expireInt)
-				.build();
+		Cookie cookie = new Cookie(key, value);
+		cookie.setMaxAge(expireInt);
+		// cookie.setSecure(true);
+		cookie.setPath("/");
+		cookie.setHttpOnly(true);
 
 		return cookie;
 	}

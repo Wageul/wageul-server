@@ -17,6 +17,7 @@ public class CorsMvcConfig implements WebMvcConfigurer {
 			.allowCredentials(true)
 			.allowedHeaders("*")
 			.exposedHeaders("Set-Cookie")
+			.allowedMethods("GET", "POST", "PUT", "DELETE")
 			.allowedOrigins(clientUrl);
 	}
 }

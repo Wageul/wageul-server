@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping(value = "/api/user", produces = "application/json")
 @RequiredArgsConstructor
+@CrossOrigin(origins = "*", allowedHeaders = "*")
 public class UserController {
 
     private final UserService userService;

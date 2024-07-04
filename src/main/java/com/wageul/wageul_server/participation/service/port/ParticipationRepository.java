@@ -1,4 +1,4 @@
-package com.wageul.wageul_server.participation.service.dto;
+package com.wageul.wageul_server.participation.service.port;
 
 import java.util.List;
 import java.util.Optional;

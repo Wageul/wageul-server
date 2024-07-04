@@ -51,4 +51,17 @@ public class ParticipationService {
 		if (participation != null && participation.getUser().equals(user))
 			participationRepository.delete(participation);
 	}
+
+	@Transactional
+	public List<User> getExperienceParticipations(long experienceId) {
+		Experience experience = experienceRepository.findById(experienceId).orElse(null);
+		List<Participation> participations = null;
+		if(experience != null) {
+			participations = participationRepository.findByExperience(experience);
+			List<User> users = participations.stream().map(Participation::getUser).toList();
+			return users;
+		} else {
+			throw new RuntimeException("NO EXPERIENCE");
+		}
+	}
 }

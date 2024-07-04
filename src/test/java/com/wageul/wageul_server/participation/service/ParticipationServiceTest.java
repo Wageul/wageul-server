@@ -1,6 +1,7 @@
 package com.wageul.wageul_server.participation.service;
 
-import static org.junit.jupiter.api.Assertions.*;
+
+import java.util.List;
 
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -97,6 +98,39 @@ class ParticipationServiceTest {
 
 		// then
 		Assertions.assertThat(participationService.getAll().size()).isEqualTo(0);
+	}
+
+	@Test
+	void 체험별_참여자_조회() {
+		// given
+		User user = User.builder()
+			.id(1L)
+			.email("abc@gmail.com")
+			.name("test")
+			.build();
+
+		fakeUserRepository.save(user);
+
+		Experience experience = Experience.builder()
+			.id(1L)
+			.title("experience!")
+			.content("new experience")
+			.build();
+
+		fakeExperienceRepository.save(experience);
+
+		ParticipationCreate participationCreate = ParticipationCreate.builder()
+			.experienceId(experience.getId())
+			.build();
+
+		Participation participation = participationService.create(participationCreate);
+
+		// when
+		List<User> experienceParticipations = participationService.getExperienceParticipations(experience.getId());
+
+		// then
+		Assertions.assertThat(experienceParticipations.size()).isEqualTo(1);
+		Assertions.assertThat(experienceParticipations.getLast()).isEqualTo(user);
 	}
 
 }

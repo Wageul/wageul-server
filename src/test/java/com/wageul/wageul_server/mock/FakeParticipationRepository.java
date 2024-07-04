@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 
+import com.wageul.wageul_server.experience.domain.Experience;
 import com.wageul.wageul_server.participation.domain.Participation;
 import com.wageul.wageul_server.participation.service.dto.ParticipationRepository;
 import com.wageul.wageul_server.user.domain.User;
@@ -51,5 +52,10 @@ public class FakeParticipationRepository implements ParticipationRepository {
 	@Override
 	public List<Participation> findByUser(User user) {
 		return data.stream().filter(item -> item.getUser().equals(user)).toList();
+	}
+
+	@Override
+	public List<Participation> findByExperience(Experience experience) {
+		return data.stream().filter(item -> item.getExperience().equals(experience)).toList();
 	}
 }

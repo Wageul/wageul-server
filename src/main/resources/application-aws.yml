@@ -1,0 +1,8 @@
+cloud:
+  aws:
+    s3.bucket: wageul-bucket
+    stack.auto: false
+    region.static: ap-northeast-2
+    credentials:
+      accessKey: ${AWS_S3_ACCESSKEY}
+      secretKey: ${AWS_S3_SECRETKEY}

@@ -1,6 +1,8 @@
 spring:
   application:
     name: wageul-server
+  profiles:
+    include: aws
   # Database
   datasource:
     driver-class-name: org.postgresql.Driver

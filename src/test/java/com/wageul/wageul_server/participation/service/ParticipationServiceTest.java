@@ -133,4 +133,47 @@ class ParticipationServiceTest {
 		Assertions.assertThat(experienceParticipations.getLast()).isEqualTo(user);
 	}
 
+	@Test
+	void 체험작성자는_참여자를_추방할수있다() {
+		// given
+		User user1 = User.builder()
+			.id(1L)
+			.email("abc@gmail.com")
+			.name("test")
+			.build();
+
+		fakeUserRepository.save(user1);
+
+		User user2 = User.builder()
+			.id(2L)
+			.email("abc@gmail.com")
+			.name("test")
+			.build();
+
+		fakeUserRepository.save(user2);
+
+		Experience experience = Experience.builder()
+			.id(1L)
+			.title("experience!")
+			.content("new experience")
+			.writer(user2)
+			.build();
+
+		fakeExperienceRepository.save(experience); // user2가 experience1을 작성함
+
+		// 로그인한 user1이 experience1에 참여함
+		ParticipationCreate participationCreate = ParticipationCreate.builder()
+			.experienceId(experience.getId())
+			.build();
+
+		Participation participation = participationService.create(participationCreate);
+
+		// when
+
+		// then
+		// 로그인한 user1이 user2가 작성한 experience1에 대한 참여 정보를 삭제할 수 없음
+		Assertions.assertThatThrownBy(() -> {
+			participationService.decline(1L);
+		}).isInstanceOf(RuntimeException.class);
+	}
 }

@@ -59,6 +59,13 @@ public class ParticipationController {
 		participationService.delete(participationId);
 	}
 
+	// 체험 참여자 추방
+	@ResponseStatus(HttpStatus.OK)
+	@DeleteMapping("/decline/{participationId}/{userId}")
+	public void decline(@PathVariable("participationId") long participationId) {
+		participationService.decline(participationId);
+	}
+
 	// 체험 별 참여자 목록 조회
 	@GetMapping("/experience/{experienceId}")
 	public ResponseEntity<ExperienceParticipationResponse> getExperienceParticipations(@PathVariable("experienceId") long experienceId) {

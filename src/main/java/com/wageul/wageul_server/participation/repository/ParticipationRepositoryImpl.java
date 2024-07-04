@@ -6,7 +6,7 @@ import java.util.Optional;
 import org.springframework.stereotype.Repository;
 
 import com.wageul.wageul_server.participation.domain.Participation;
-import com.wageul.wageul_server.participation.service.dto.ParticipationRepository;
+import com.wageul.wageul_server.participation.service.port.ParticipationRepository;
 
 import lombok.RequiredArgsConstructor;
 

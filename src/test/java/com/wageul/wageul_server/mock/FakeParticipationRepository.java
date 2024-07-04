@@ -8,7 +8,7 @@ import java.util.Optional;
 
 import com.wageul.wageul_server.experience.domain.Experience;
 import com.wageul.wageul_server.participation.domain.Participation;
-import com.wageul.wageul_server.participation.service.dto.ParticipationRepository;
+import com.wageul.wageul_server.participation.service.port.ParticipationRepository;
 import com.wageul.wageul_server.user.domain.User;
 
 public class FakeParticipationRepository implements ParticipationRepository {

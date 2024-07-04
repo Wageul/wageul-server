@@ -16,7 +16,7 @@ import com.wageul.wageul_server.mock.FakeUserRepository;
 import com.wageul.wageul_server.oauth2.AuthorizationUtil;
 import com.wageul.wageul_server.participation.domain.Participation;
 import com.wageul.wageul_server.participation.dto.ParticipationCreate;
-import com.wageul.wageul_server.participation.service.dto.ParticipationRepository;
+import com.wageul.wageul_server.participation.service.port.ParticipationRepository;
 import com.wageul.wageul_server.user.domain.User;
 import com.wageul.wageul_server.user.service.port.UserRepository;
 

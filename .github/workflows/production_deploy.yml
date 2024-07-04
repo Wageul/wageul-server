@@ -85,6 +85,8 @@ jobs:
       # 환경변수 적용
       - name: Set environment variables
         run: |
+          echo "AWS_S3_ACCESSKEY=${{ secrets.AWS_S3_ACCESSKEY }}" >> .env
+          echo "AWS_S3_SECRETKEY=${{ secrets.AWS_S3_SECRETKEY }}" >> .env
           echo "GOOGLE_AUTH_CODE=${{ secrets.GOOGLE_AUTH_CODE }}" >> .env
           echo "GOOGLE_CLIENT_ID=${{ secrets.GOOGLE_CLIENT_ID }}" >> .env
           echo "GOOGLE_CLIENT_SECRET=${{ secrets.GOOGLE_CLIENT_SECRET }}" >> .env

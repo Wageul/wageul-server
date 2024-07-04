@@ -6,17 +6,19 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.wageul.wageul_server.participation.domain.Participation;
+import com.wageul.wageul_server.participation.dto.ExperienceParticipationResponse;
 import com.wageul.wageul_server.participation.dto.ParticipationCreate;
 import com.wageul.wageul_server.participation.dto.ParticipationResponse;
 import com.wageul.wageul_server.participation.service.ParticipationService;
+import com.wageul.wageul_server.user.domain.User;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -29,6 +31,7 @@ public class ParticipationController {
 
 	private final ParticipationService participationService;
 
+	// 참여하기
 	@PostMapping
 	public ResponseEntity<ParticipationResponse> create(@RequestBody ParticipationCreate participationCreate) {
 		Participation participation = participationService.create(participationCreate);
@@ -39,6 +42,7 @@ public class ParticipationController {
 		return ResponseEntity.status(HttpStatus.CREATED).body(participationResponse);
 	}
 
+	// 로그인한 사용자의 참여 체험 목록 조회
 	@GetMapping
 	public ResponseEntity<List<ParticipationResponse>> getAll() {
 		List<Participation> participations = participationService.getAll();
@@ -48,9 +52,19 @@ public class ParticipationController {
 		return ResponseEntity.ok().body(participationResponses);
 	}
 
+	// 자신이 신청한 체험 참여 취소
 	@ResponseStatus(HttpStatus.OK)
 	@DeleteMapping("/{participationId}")
-	public void delete(@RequestParam("participationId") long participationId) {
+	public void delete(@PathVariable("participationId") long participationId) {
 		participationService.delete(participationId);
+	}
+
+	// 체험 별 참여자 목록 조회
+	@GetMapping("/experience/{experienceId}")
+	public ResponseEntity<ExperienceParticipationResponse> getExperienceParticipations(@PathVariable("experienceId") long experienceId) {
+		List<User> users = participationService.getExperienceParticipations(experienceId);
+		ExperienceParticipationResponse epr
+			= new ExperienceParticipationResponse(experienceId, users);
+		return ResponseEntity.ok().body(epr);
 	}
 }

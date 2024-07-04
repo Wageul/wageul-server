@@ -53,6 +53,19 @@ public class ParticipationService {
 	}
 
 	@Transactional
+	public void decline(long id) {
+		Participation participation = participationRepository.findById(id).orElse(null);
+		long loginUserId = authorizationUtil.getLoginUserId();
+		User loginUser = userRepository.getById(loginUserId);
+		if(participation != null && participation.getExperience().getWriter().equals(loginUser)) {
+			// participation이 존재하고, 추방을 요청한 로그인 유저가 작성자라면 추방 성공
+			participationRepository.delete(participation);
+		} else {
+			throw new RuntimeException("NOT WRITER");
+		}
+	}
+
+	@Transactional
 	public List<User> getExperienceParticipations(long experienceId) {
 		Experience experience = experienceRepository.findById(experienceId).orElse(null);
 		List<Participation> participations = null;

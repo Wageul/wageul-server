@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.wageul.wageul_server.review.domain.Review;
 import com.wageul.wageul_server.review.dto.ReviewCreate;
+import com.wageul.wageul_server.review.dto.ReviewResponse;
 import com.wageul.wageul_server.review.service.ReviewService;
 
 import lombok.RequiredArgsConstructor;
@@ -25,11 +26,11 @@ public class ReviewController {
 	private final ReviewService reviewService;
 
 	@PostMapping
-	public ResponseEntity<Review> create(
+	public ResponseEntity<ReviewResponse> create(
 		@RequestBody ReviewCreate reviewCreate) {
 		Review review = reviewService.create(reviewCreate);
 
-		return ResponseEntity.ok().body(review);
+		return ResponseEntity.ok().body(new ReviewResponse(review));
 	}
 
 	@DeleteMapping("/{reviewId}")
@@ -38,9 +39,11 @@ public class ReviewController {
 	}
 
 	@GetMapping("/user/{userId}")
-	public ResponseEntity<List<Review>> getUserReviews(@PathVariable("userId") Long userId) {
+	public ResponseEntity<List<ReviewResponse>> getUserReviews(@PathVariable("userId") Long userId) {
 		List<Review> reviews = reviewService.getAllByTarget(userId);
 
-		return ResponseEntity.ok().body(reviews);
+		List<ReviewResponse> reviewResponses = reviews.stream().map(ReviewResponse::new).toList();
+
+		return ResponseEntity.ok().body(reviewResponses);
 	}
 }

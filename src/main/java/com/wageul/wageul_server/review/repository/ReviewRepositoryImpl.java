@@ -1,19 +1,17 @@
 package com.wageul.wageul_server.review.repository;
 
-import java.util.List;
 import java.util.Optional;
 
 import org.springframework.stereotype.Repository;
 
 import com.wageul.wageul_server.review.domain.Review;
 import com.wageul.wageul_server.review.service.port.ReviewRepository;
-import com.wageul.wageul_server.user.domain.User;
 
 import lombok.RequiredArgsConstructor;
 
 @Repository
 @RequiredArgsConstructor
-public class ReviewRepositoryImpl implements ReviewRepository {
+public class ReviewRepositoryImpl extends ReviewCustomRepositoryImpl implements ReviewRepository {
 
 	private final ReviewJpaRepository reviewJpaRepository;
 
@@ -30,10 +28,5 @@ public class ReviewRepositoryImpl implements ReviewRepository {
 	@Override
 	public void delete(Review review) {
 		reviewJpaRepository.delete(ReviewEntity.from(review));
-	}
-
-	@Override
-	public List<Review> findByTarget(User target) {
-		return reviewJpaRepository.findByTarget(target);
 	}
 }

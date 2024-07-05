@@ -1,13 +1,23 @@
 package com.wageul.wageul_server.review.dto;
 
+import lombok.Builder;
 import lombok.Getter;
-import lombok.RequiredArgsConstructor;
 
 @Getter
-@RequiredArgsConstructor
 public class ReviewCreate {
 
-	private final Long targetId;
-	private final String content;
-	private final Integer rate;
+	private Long targetId;
+	private String content;
+	private Integer rate;
+
+	public ReviewCreate() {}
+
+	public ReviewCreate(
+		Long targetId,
+		String content,
+		Integer rate) {
+		this.targetId = targetId;
+		this.content = content;
+		this.rate = rate;
+	}
 }

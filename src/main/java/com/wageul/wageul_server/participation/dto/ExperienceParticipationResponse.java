@@ -17,6 +17,7 @@ public class ExperienceParticipationResponse {
 		this.experienceId = experienceId;
 		this.userSimpleProflieList = users.stream().map(user -> {
 			return UserSimpleProflieDto.builder()
+				.id(user.getId())
 				.profileImg(user.getProfileImg())
 				.name(user.getName())
 				.build();

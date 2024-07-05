@@ -13,6 +13,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.wageul.wageul_server.experience.domain.Experience;
+import com.wageul.wageul_server.experience.service.ExperienceService;
 import com.wageul.wageul_server.participation.domain.Participation;
 import com.wageul.wageul_server.participation.dto.ExperienceParticipationResponse;
 import com.wageul.wageul_server.participation.dto.ParticipationCreate;
@@ -30,6 +32,7 @@ import lombok.extern.slf4j.Slf4j;
 public class ParticipationController {
 
 	private final ParticipationService participationService;
+	private final ExperienceService experienceService;
 
 	// 참여하기
 	@PostMapping
@@ -73,5 +76,21 @@ public class ParticipationController {
 		ExperienceParticipationResponse epr
 			= new ExperienceParticipationResponse(experienceId, users);
 		return ResponseEntity.ok().body(epr);
+	}
+
+	// 전체 체험 별 참여자 목록 조회
+	@GetMapping("/experience")
+	public ResponseEntity<List<ExperienceParticipationResponse>> getAllExperienceParticipations() {
+		List<Experience> experiences = experienceService.getAll();
+		List<ExperienceParticipationResponse> eprs = experiences
+			.stream()
+			.map(
+				experience -> {
+					List<User> users = participationService.getExperienceParticipations(experience.getId());
+					return new ExperienceParticipationResponse(experience.getId(), users);
+				})
+			.toList();
+
+		return ResponseEntity.ok().body(eprs);
 	}
 }

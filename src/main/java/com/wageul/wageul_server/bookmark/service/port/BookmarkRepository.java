@@ -8,5 +8,6 @@ import com.wageul.wageul_server.user.domain.User;
 public interface BookmarkRepository extends BookmarkCustomRepository {
 	Bookmark save(Bookmark bookmark);
 
+	Long countByUserIdAndExperienceId(long userId, long experienceId);
 	void delete(Bookmark bookmark);
 }

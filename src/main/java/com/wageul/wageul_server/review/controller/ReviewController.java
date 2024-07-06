@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.wageul.wageul_server.review.domain.Review;
 import com.wageul.wageul_server.review.dto.ReviewCreate;
+import com.wageul.wageul_server.review.dto.ReviewRateResponse;
 import com.wageul.wageul_server.review.dto.ReviewResponse;
 import com.wageul.wageul_server.review.service.ReviewService;
 
@@ -39,11 +40,9 @@ public class ReviewController {
 	}
 
 	@GetMapping("/user/{userId}")
-	public ResponseEntity<List<ReviewResponse>> getUserReviews(@PathVariable("userId") Long userId) {
-		List<Review> reviews = reviewService.getAllByTarget(userId);
+	public ResponseEntity<ReviewRateResponse> getUserReviews(@PathVariable("userId") Long userId) {
+		ReviewRateResponse reviewRateResponse = reviewService.getAllByTarget(userId);
 
-		List<ReviewResponse> reviewResponses = reviews.stream().map(ReviewResponse::new).toList();
-
-		return ResponseEntity.ok().body(reviewResponses);
+		return ResponseEntity.ok().body(reviewRateResponse);
 	}
 }

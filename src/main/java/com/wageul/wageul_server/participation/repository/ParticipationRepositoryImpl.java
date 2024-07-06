@@ -32,6 +32,11 @@ public class ParticipationRepositoryImpl extends ParticipationCustomRepositoryIm
 	}
 
 	@Override
+	public Long countByUserIdAndExperienceId(long userId, long experienceId) {
+		return participationJpaRepository.countByUserIdAndExperienceId(userId, experienceId);
+	}
+
+	@Override
 	public void delete(Participation participation) {
 		participationJpaRepository.delete(ParticipationEntity.from(participation));
 	}

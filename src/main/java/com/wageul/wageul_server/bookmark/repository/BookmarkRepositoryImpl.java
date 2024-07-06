@@ -21,6 +21,11 @@ public class BookmarkRepositoryImpl extends BookmarkCustomRepositoryImpl impleme
 	}
 
 	@Override
+	public Long countByUserIdAndExperienceId(long userId, long experienceId) {
+		return bookmarkJpaRepository.countByUserIdAndExperienceId(userId, experienceId);
+	}
+
+	@Override
 	public void delete(Bookmark bookmark) {
 		bookmarkJpaRepository.delete(BookmarkEntity.from(bookmark));
 	}

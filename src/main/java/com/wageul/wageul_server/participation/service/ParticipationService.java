@@ -28,11 +28,17 @@ public class ParticipationService {
 	public Participation create(ParticipationCreate participationCreate) {
 		User user = userRepository.findById(authorizationUtil.getLoginUserId()).orElse(null);
 		Experience experience = experienceRepository.findById(participationCreate.getExperienceId()).orElse(null);
-		if (user != null && experience != null) {
-			Participation participation = Participation.from(user, experience);
-			return participationRepository.save(participation);
+
+		if (user == null || experience == null) {
+			throw new RuntimeException("NO USER OR EXPERIENCE");
 		}
-		return null;
+		if (participationRepository.countByUserIdAndExperienceId(user.getId(), experience.getId()) > 0) {
+			// 이미 참여 정보가 있음
+			throw new RuntimeException("ALREADY PARTICIPATE");
+		}
+
+		Participation participation = Participation.from(user, experience);
+		return participationRepository.save(participation);
 	}
 
 	@Transactional

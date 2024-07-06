@@ -31,6 +31,11 @@ public class BookmarkService {
 			.orElseThrow(() -> new RuntimeException("NO LOGIN USER INFO"));
 		Experience experience = experienceRepository.findById(experienceId)
 			.orElseThrow(() -> new RuntimeException("NO EXPERIENCE"));
+
+		if (bookmarkRepository.countByUserIdAndExperienceId(loginUser.getId(), experienceId) > 0) {
+			throw new RuntimeException("ALREADY BOOKMARKED");
+		}
+
 		Bookmark bookmark = Bookmark.builder()
 			.user(loginUser)
 			.experience(experience)

@@ -31,13 +31,7 @@ public class ExperienceController {
 
     @PostMapping
     public ResponseEntity<Experience> create(
-        @CookieValue("token") String token,
         @RequestBody ExperienceCreate experienceCreate) {
-        if (token == null) {
-            HttpHeaders headers = new HttpHeaders();
-            headers.add("Location", "/");
-            return new ResponseEntity<Experience>(headers, HttpStatus.FOUND);
-        }
         Experience experience = experienceService.create(experienceCreate);
         return ResponseEntity.ok().body(experience);
     }

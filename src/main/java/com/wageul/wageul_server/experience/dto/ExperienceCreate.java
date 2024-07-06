@@ -12,27 +12,28 @@ import java.time.LocalTime;
 @Getter
 public class ExperienceCreate {
 
-    private final String title;
-    private final String location;
-    private final LocalDateTime datetime;
-    private final String content;
-    private final LocalTime duration;
-    private final int cost;
-    private final String contact;
-    private final int limitMember;
-    private final String language;
+    private String title;
+    private String location;
+    private LocalDateTime datetime;
+    private String content;
+    private LocalTime duration;
+    private int cost;
+    private String contact;
+    private int limitMember;
+    private String language;
 
-    @Builder
+    public ExperienceCreate() {}
+
     public ExperienceCreate(
-            @JsonProperty("title") String title,
-            @JsonProperty("location") String location,
-            @JsonProperty("datetime") LocalDateTime datetime,
-            @JsonProperty("content") String content,
-            @JsonProperty("duration") LocalTime duration,
-            @JsonProperty("cost") int cost,
-            @JsonProperty("contact") String contact,
-            @JsonProperty("limitMember") int limitMember,
-            @JsonProperty("language") String language) {
+            String title,
+            String location,
+            LocalDateTime datetime,
+            String content,
+            LocalTime duration,
+            int cost,
+            String contact,
+            int limitMember,
+            String language) {
         this.title = title;
         this.location = location;
         this.datetime = datetime;

@@ -1,6 +1,7 @@
 package com.wageul.wageul_server.participation.repository;
 
 import java.util.List;
+import java.util.Optional;
 
 import com.wageul.wageul_server.experience.domain.Experience;
 import com.wageul.wageul_server.participation.domain.Participation;

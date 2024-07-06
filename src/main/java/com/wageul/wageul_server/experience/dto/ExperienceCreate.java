@@ -10,6 +10,7 @@ import java.time.LocalDateTime;
 import java.time.LocalTime;
 
 @Getter
+@Builder
 public class ExperienceCreate {
 
     private String title;

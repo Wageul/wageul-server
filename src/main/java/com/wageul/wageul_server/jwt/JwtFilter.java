@@ -37,7 +37,7 @@ public class JwtFilter extends OncePerRequestFilter {
 			filterChain.doFilter(request, response);
 			return;
 		}
-		if (requestUri.matches("/api/experience")) {
+		if (requestUri.matches("/api/experience") && request.getMethod().equals("GET")) {
 			filterChain.doFilter(request, response);
 			return;
 		}

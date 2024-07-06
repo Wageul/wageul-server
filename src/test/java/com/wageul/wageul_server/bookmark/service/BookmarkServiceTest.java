@@ -66,6 +66,34 @@ class BookmarkServiceTest {
 	}
 
 	@Test
+	void 북마크추가는_한번만가능() {
+		// given
+		User user = User.builder()
+			.id(userId)
+			.email("abc@gmail.com")
+			.name("test")
+			.build();
+
+		userRepository.save(user);
+
+		Experience experience = Experience.builder()
+			.id(1L)
+			.title("experience!")
+			.content("new experience")
+			.build();
+
+		experienceRepository.save(experience);
+
+		// when
+		Bookmark bookmark = bookmarkService.create(experience.getId());
+
+		// then
+		Assertions.assertThatThrownBy(() ->
+			bookmarkService.create(experience.getId())
+		).hasMessage("ALREADY BOOKMARKED");
+	}
+
+	@Test
 	void 북마크삭제() {
 		// given
 		User user = User.builder()

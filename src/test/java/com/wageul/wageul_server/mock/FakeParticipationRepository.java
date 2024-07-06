@@ -45,6 +45,15 @@ public class FakeParticipationRepository implements ParticipationRepository {
 	}
 
 	@Override
+	public Long countByUserIdAndExperienceId(long userId, long experienceId) {
+		return (long) data
+			.stream()
+			.map(item -> item.getUser().getId() == userId && item.getExperience().getId() == experienceId)
+			.toList()
+			.size();
+	}
+
+	@Override
 	public void delete(Participation participation) {
 		data.removeIf(item -> Objects.equals(item.getId(), participation.getId()));
 	}

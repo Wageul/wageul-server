@@ -69,6 +69,38 @@ class ParticipationServiceTest {
 	}
 
 	@Test
+	void 체험신청은_두번할수없다() {
+		// given
+		User user = User.builder()
+			.id(1L)
+			.email("abc@gmail.com")
+			.name("test")
+			.build();
+
+		fakeUserRepository.save(user);
+
+		Experience experience = Experience.builder()
+			.id(1L)
+			.title("experience!")
+			.content("new experience")
+			.build();
+
+		fakeExperienceRepository.save(experience);
+
+		ParticipationCreate participationCreate = ParticipationCreate.builder()
+			.experienceId(experience.getId())
+			.build();
+
+		// when
+		Participation participation = participationService.create(participationCreate);
+
+		// then
+		Assertions.assertThatThrownBy(() ->
+			participationService.create(participationCreate)
+		).hasMessage("ALREADY PARTICIPATE");
+	}
+
+	@Test
 	void 체험신청취소() {
 		// given
 		User user = User.builder()

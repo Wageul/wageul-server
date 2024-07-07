@@ -52,8 +52,10 @@ public class ExperienceService {
     public void delete(long id) {
         User writer = userRepository.getById(authorizationUtil.getLoginUserId());
         Experience experience = getById(id);
-        if(experience.getWriter().equals(writer)) {
+        if (experience.getWriter().equals(writer)) {
             experienceRepository.deleteById(id);
+        } else {
+           throw new RuntimeException("ONLY WRITER CAN DELETE EXPERIENCE");
         }
     }
 }

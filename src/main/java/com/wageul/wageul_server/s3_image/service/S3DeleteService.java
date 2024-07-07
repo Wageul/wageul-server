@@ -27,4 +27,9 @@ public class S3DeleteService {
 			amazonS3.deleteObject(bucket, fileName);
 		}
 	}
+
+	// s3 파일 하나 삭제
+	public void deleteFile(String fileName) {
+		amazonS3.deleteObject(bucket, fileName);
+	}
 }

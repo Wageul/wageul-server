@@ -4,7 +4,7 @@ import java.time.LocalDateTime;
 
 import com.wageul.wageul_server.bookmark.domain.Bookmark;
 import com.wageul.wageul_server.experience.dto.ExperienceNoWriterResponse;
-import com.wageul.wageul_server.user.dto.UserSimpleProflieDto;
+import com.wageul.wageul_server.user.dto.UserSimpleProfileDto;
 
 import lombok.Builder;
 import lombok.Getter;
@@ -13,14 +13,14 @@ import lombok.Getter;
 public class BookmarkResponse {
 
 	private final Long id;
-	private final UserSimpleProflieDto user;
+	private final UserSimpleProfileDto user;
 	private final ExperienceNoWriterResponse experience;
 	private final LocalDateTime createdAt;
 
 	@Builder
 	public BookmarkResponse(Bookmark bookmark) {
 		id = bookmark.getId();
-		user = UserSimpleProflieDto.builder()
+		user = UserSimpleProfileDto.builder()
 			.id(bookmark.getUser().getId())
 			.profileImg(bookmark.getUser().getProfileImg())
 			.name(bookmark.getUser().getName())

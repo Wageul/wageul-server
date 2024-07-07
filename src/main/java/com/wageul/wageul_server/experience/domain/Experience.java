@@ -56,4 +56,10 @@ public class Experience {
             .writer(writer)
             .build();
     }
+
+    public Experience withProfileUrl(User writer) {
+        return Experience.builder()
+                .writer(writer)
+                .build();
+    }
 }

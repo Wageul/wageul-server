@@ -8,7 +8,6 @@ import org.springframework.transaction.annotation.Transactional;
 import com.wageul.wageul_server.oauth2.AuthorizationUtil;
 import com.wageul.wageul_server.review.domain.Review;
 import com.wageul.wageul_server.review.dto.ReviewCreate;
-import com.wageul.wageul_server.review.dto.ReviewRateResponse;
 import com.wageul.wageul_server.review.dto.ReviewResponse;
 import com.wageul.wageul_server.review.service.port.ReviewRepository;
 import com.wageul.wageul_server.user.domain.User;
@@ -47,21 +46,20 @@ public class ReviewService {
 		reviewRepository.delete(review);
 	}
 
-	@Transactional
-	public ReviewRateResponse getAllByTarget(Long userId) {
-		User target = userRepository.findById(userId)
-			.orElseThrow(() -> new RuntimeException("NO REVIEW TARGET INFO"));
+	public List<Review> findByTargetId(long userId) {
+		return reviewRepository.findByTargetId(userId);
+	}
 
-		List<Review> reviews = reviewRepository.findByTarget(target);
-
+	public Double getRate(List<Review> reviews) {
 		List<ReviewResponse> reviewResponses = reviews.stream().map(ReviewResponse::new).toList();
 
 		Double sum = 0D;
 		for (Review review : reviews) {
 			sum += review.getRate();
 		}
-		Double avg = sum / reviews.size();
-
-		return new ReviewRateResponse(avg, reviewResponses);
+		if (reviews.size() > 0) {
+			return  sum / reviews.size();
+		}
+		return sum;
 	}
 }

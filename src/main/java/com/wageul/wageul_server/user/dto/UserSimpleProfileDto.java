@@ -5,7 +5,7 @@ import lombok.Getter;
 
 @Getter
 @Builder
-public class UserSimpleProflieDto {
+public class UserSimpleProfileDto {
 
 	private final long id;
 	private final String profileImg;

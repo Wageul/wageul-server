@@ -1,9 +1,5 @@
 package com.wageul.wageul_server.review.service;
 
-import static org.junit.jupiter.api.Assertions.*;
-
-import java.util.List;
-
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -13,8 +9,9 @@ import com.wageul.wageul_server.mock.FakeReviewRepository;
 import com.wageul.wageul_server.mock.FakeUserRepository;
 import com.wageul.wageul_server.review.domain.Review;
 import com.wageul.wageul_server.review.dto.ReviewCreate;
-import com.wageul.wageul_server.review.dto.ReviewRateResponse;
 import com.wageul.wageul_server.user.domain.User;
+
+import java.util.List;
 
 class ReviewServiceTest {
 
@@ -91,7 +88,7 @@ class ReviewServiceTest {
 		reviewService.delete(review.getId());
 
 		// then
-		Assertions.assertThat(reviewService.getAllByTarget(user2.getId()).getReviews().size()).isEqualTo(0);
+		Assertions.assertThat(reviewService.findByTargetId(user2.getId()).size()).isEqualTo(0);
 	}
 
 	@Test
@@ -162,14 +159,15 @@ class ReviewServiceTest {
 		Review review2 = reviewService.create(reviewCreate2);
 
 		// when
-		ReviewRateResponse reviewRateResponse = reviewService.getAllByTarget(user2.getId());
+		List<Review> reviews = reviewService.findByTargetId(user2.getId());
+		Double avg = reviewService.getRate(reviews);
 
 		// then
-		Assertions.assertThat(reviewRateResponse.getAvg()).isEqualTo(4);
-		Assertions.assertThat(reviewRateResponse.getReviews().size()).isEqualTo(2);
-		Assertions.assertThat(reviewRateResponse.getReviews().get(0).getContent()).isEqualTo("this is review");
-		Assertions.assertThat(reviewRateResponse.getReviews().get(0).getRate()).isEqualTo(5);
-		Assertions.assertThat(reviewRateResponse.getReviews().get(1).getContent()).isEqualTo("this is another review");
-		Assertions.assertThat(reviewRateResponse.getReviews().get(1).getRate()).isEqualTo(3);
+		Assertions.assertThat(avg).isEqualTo(4);
+		Assertions.assertThat(reviews.size()).isEqualTo(2);
+		Assertions.assertThat(reviews.get(0).getContent()).isEqualTo("this is review");
+		Assertions.assertThat(reviews.get(0).getRate()).isEqualTo(5);
+		Assertions.assertThat(reviews.get(1).getContent()).isEqualTo("this is another review");
+		Assertions.assertThat(reviews.get(1).getRate()).isEqualTo(3);
 	}
 }

@@ -47,6 +47,22 @@ public class S3UploadService {
 		return fileNameList;
 	}
 
+	// s3 파일 하나 업로드
+	public String saveFile(MultipartFile multipartFile, String directory) {
+		String originalFilename = directory + "/" + createFileName(multipartFile.getOriginalFilename());
+		ObjectMetadata metadata = new ObjectMetadata();
+		metadata.setContentLength(multipartFile.getSize());
+		metadata.setContentType(multipartFile.getContentType());
+
+		try {
+			amazonS3.putObject(bucket, originalFilename, multipartFile.getInputStream(), metadata);
+		} catch (IOException e) {
+			throw new RuntimeException(e);
+		}
+
+		return originalFilename;
+	}
+
 	// 파일명 중복 방지 (UUID)
 	private String createFileName(String fileName) {
 		return UUID.randomUUID().toString().concat(getFileExtension(fileName));

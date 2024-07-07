@@ -87,7 +87,13 @@ public class SecurityConfig {
 		//경로별 인가 작업
 		http
 			.authorizeHttpRequests((auth) -> auth
-				.requestMatchers("/", "/api/experience", "/api/experience/**").permitAll()
+				.requestMatchers(
+						"/",
+						"/api/experience",
+						"/api/experience/**",
+						"/api/participation/experience/**",
+						"/api/upload/read-ex-image/**"
+				).permitAll()
 				.anyRequest().authenticated());
 
 		//세션 설정 : STATELESS

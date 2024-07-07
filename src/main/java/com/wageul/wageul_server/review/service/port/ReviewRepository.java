@@ -1,5 +1,6 @@
 package com.wageul.wageul_server.review.service.port;
 
+import java.util.List;
 import java.util.Optional;
 
 import com.wageul.wageul_server.review.domain.Review;
@@ -11,4 +12,6 @@ public interface ReviewRepository extends ReviewCustomRepository {
 	Optional<Review> findById(Long reviewId);
 
 	void delete(Review review);
+
+    List<Review> findByTargetId(long userId);
 }

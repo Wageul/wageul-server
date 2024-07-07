@@ -1,5 +1,6 @@
 package com.wageul.wageul_server.review.repository;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.stereotype.Repository;
@@ -28,5 +29,10 @@ public class ReviewRepositoryImpl extends ReviewCustomRepositoryImpl implements 
 	@Override
 	public void delete(Review review) {
 		reviewJpaRepository.delete(ReviewEntity.from(review));
+	}
+
+	@Override
+	public List<Review> findByTargetId(long userId) {
+		return reviewJpaRepository.findByTargetId(userId).stream().map(ReviewEntity::toModel).toList();
 	}
 }

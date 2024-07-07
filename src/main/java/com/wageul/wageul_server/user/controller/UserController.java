@@ -1,6 +1,7 @@
 package com.wageul.wageul_server.user.controller;
 
 import com.wageul.wageul_server.jwt.JwtUtil;
+import com.wageul.wageul_server.s3_image.service.S3ReadService;
 import com.wageul.wageul_server.user.domain.User;
 import com.wageul.wageul_server.user.dto.UserUpdate;
 import com.wageul.wageul_server.user.service.UserService;
@@ -18,6 +19,7 @@ import org.springframework.web.bind.annotation.*;
 public class UserController {
 
     private final UserService userService;
+    private final S3ReadService s3ReadService;
     private final JwtUtil jwtUtil;
 
     // userId에 해당하는 사용자 정보를, 해당 유저가 아니어도 가져올 수 있다.
@@ -31,7 +33,9 @@ public class UserController {
             headers.add("Location", "/");
             return new ResponseEntity<User>(headers, HttpStatus.FOUND);
         } else {
-            return ResponseEntity.ok().body(user);
+            // profileImg 경로를 S3 전체 경로로 변환해서 응답
+            User userResponse = user.withProfileUrl(s3ReadService.readFile(user.getProfileImg()));
+            return ResponseEntity.ok().body(userResponse);
         }
     }
 
@@ -45,7 +49,11 @@ public class UserController {
         } else {
             long loginId = jwtUtil.getUserId(token);
             User user = userService.getMyInfo(loginId);
-            return ResponseEntity.ok().body(user);
+
+            // profileImg 경로를 S3 전체 경로로 변환해서 응답
+            User userResponse = user.withProfileUrl(s3ReadService.readFile(user.getProfileImg()));
+
+            return ResponseEntity.ok().body(userResponse);
         }
     }
 
@@ -55,6 +63,9 @@ public class UserController {
             @RequestBody UserUpdate userUpdate) {
         User user = userService.getById(userId);
         user = userService.update(user, userUpdate);
-        return ResponseEntity.ok().body(user);
+
+        User userResponse = user.withProfileUrl(s3ReadService.readFile(user.getProfileImg()));
+
+        return ResponseEntity.ok().body(userResponse);
     }
 }

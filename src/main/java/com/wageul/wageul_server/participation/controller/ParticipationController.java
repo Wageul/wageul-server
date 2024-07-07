@@ -2,6 +2,7 @@ package com.wageul.wageul_server.participation.controller;
 
 import java.util.List;
 
+import com.wageul.wageul_server.s3_image.service.S3ReadService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -33,6 +34,7 @@ public class ParticipationController {
 
 	private final ParticipationService participationService;
 	private final ExperienceService experienceService;
+	private final S3ReadService s3ReadService;
 
 	// 참여하기
 	@PostMapping
@@ -73,6 +75,7 @@ public class ParticipationController {
 	@GetMapping("/experience/{experienceId}")
 	public ResponseEntity<ExperienceParticipationResponse> getExperienceParticipations(@PathVariable("experienceId") long experienceId) {
 		List<User> users = participationService.getExperienceParticipations(experienceId);
+		users = getUsersWithProfileUrl(users);
 		ExperienceParticipationResponse epr
 			= new ExperienceParticipationResponse(experienceId, users);
 		return ResponseEntity.ok().body(epr);
@@ -87,10 +90,23 @@ public class ParticipationController {
 			.map(
 				experience -> {
 					List<User> users = participationService.getExperienceParticipations(experience.getId());
+					users = getUsersWithProfileUrl(users);
 					return new ExperienceParticipationResponse(experience.getId(), users);
 				})
 			.toList();
 
 		return ResponseEntity.ok().body(eprs);
+	}
+
+	private List<User> getUsersWithProfileUrl(List<User> users) {
+		users = users.stream().map(user -> {
+			String profile = user.getProfileImg();
+			if (profile == null) {
+				return user;
+			}
+			String profileUrl = s3ReadService.readFile(profile);
+			return user.withProfileUrl(profileUrl);
+		}).toList();
+		return users;
 	}
 }

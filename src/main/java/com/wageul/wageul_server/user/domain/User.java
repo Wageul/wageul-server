@@ -31,4 +31,18 @@ public class User {
                 .createdAt(createdAt)
                 .build();
     }
+
+    public User withProfileUrl(String profileUrl) {
+        return User.builder()
+                .id(id)
+                .email(email)
+                .profileImg(profileUrl)
+                .name(name)
+                .username(username)
+                .nationality(nationality)
+                .introduce(introduce)
+                .createdAt(createdAt)
+                .updatedAt(updatedAt)
+                .build();
+    }
 }

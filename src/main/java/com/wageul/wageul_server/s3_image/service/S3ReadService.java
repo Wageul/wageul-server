@@ -22,4 +22,8 @@ public class S3ReadService {
 	public List<String> readFiles(List<String> fileNames) {
 		return fileNames.stream().map(fileName -> amazonS3.getUrl(bucket, fileName).toString()).toList();
 	}
+
+	public String readFile(String fileName) {
+		return amazonS3.getUrl(bucket, fileName).toString();
+	}
 }

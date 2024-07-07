@@ -46,6 +46,11 @@ public class FakeReviewRepository implements ReviewRepository {
 	}
 
 	@Override
+	public List<Review> findByTargetId(long userId) {
+		return data.stream().filter(item -> item.getTarget().getId() == userId).toList();
+	}
+
+	@Override
 	public List<Review> findByTarget(User target) {
 		return data.stream().filter(item -> item.getTarget().equals(target)).toList();
 	}

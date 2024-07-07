@@ -246,9 +246,10 @@ class ExperienceServiceTest {
             experienceRepository,
             userRepository,
             new FakeAuthorizationUtil(2L));
-        experienceService.delete(experience1.getId());
 
         // then
-        Assertions.assertThat(experienceService.getById(experience1.getId())).isNotNull();
+        Assertions.assertThatThrownBy(
+                () -> experienceService.delete(experience1.getId())
+        ).hasMessage("ONLY WRITER CAN DELETE EXPERIENCE");
     }
 }

@@ -33,8 +33,8 @@ public class UserController {
             return new ResponseEntity<User>(headers, HttpStatus.FOUND);
         } else {
             // profileImg 경로를 S3 전체 경로로 변환해서 응답
-            User userResponse = user.withProfileUrl(s3ReadService.readFile(user.getProfileImg()));
-            return ResponseEntity.ok().body(userResponse);
+            user = getUserResponse(user);
+            return ResponseEntity.ok().body(user);
         }
     }
 
@@ -50,9 +50,8 @@ public class UserController {
             User user = userService.getMyInfo(loginId);
 
             // profileImg 경로를 S3 전체 경로로 변환해서 응답
-            User userResponse = user.withProfileUrl(s3ReadService.readFile(user.getProfileImg()));
-
-            return ResponseEntity.ok().body(userResponse);
+            user = getUserResponse(user);
+            return ResponseEntity.ok().body(user);
         }
     }
 
@@ -66,5 +65,14 @@ public class UserController {
         User userResponse = user.withProfileUrl(s3ReadService.readFile(user.getProfileImg()));
 
         return ResponseEntity.ok().body(userResponse);
+    }
+
+    private User getUserResponse(User user) {
+        String profile = user.getProfileImg();
+        if (profile == null) {
+            return user;
+        }
+
+        return user.withProfileUrl(s3ReadService.readFile(profile));
     }
 }

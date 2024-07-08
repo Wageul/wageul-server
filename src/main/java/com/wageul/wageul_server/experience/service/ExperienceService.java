@@ -25,6 +25,7 @@ public class ExperienceService {
     private final UserRepository userRepository;
     private final AuthorizationUtil authorizationUtil;
 
+    @Transactional
     public List<Experience> getAll() {
         return experienceRepository.findAll();
     }

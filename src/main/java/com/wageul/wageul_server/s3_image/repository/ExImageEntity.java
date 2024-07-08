@@ -1,5 +1,6 @@
 package com.wageul.wageul_server.s3_image.repository;
 
+import com.wageul.wageul_server.s3_image.dto.ExImageDto;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
@@ -48,5 +49,12 @@ public class ExImageEntity {
 			.image(image)
 			.experience(experience.toModel())
 			.build();
+	}
+
+	public ExImageDto toDto() {
+		return ExImageDto.builder()
+				.id(id)
+				.image(image)
+				.build();
 	}
 }

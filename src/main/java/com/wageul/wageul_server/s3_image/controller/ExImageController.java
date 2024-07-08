@@ -60,6 +60,9 @@ public class ExImageController {
 
 		exImageService.saveExImage(savedfiles, exImageRequest.getExperienceId());
 
+		// S3 전체 경로로 응답
+		savedfiles = s3ReadService.readFiles(savedfiles);
+
 		return ResponseEntity.ok().body(new ExImageResponse(savedfiles));
 	}
 

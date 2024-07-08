@@ -225,7 +225,7 @@ class ExperienceServiceTest {
         userRepository.save(user);
         User user2 = User.builder()
             .id(2L)
-            .email("abc@gmail.com")
+            .email("efg@gmail.com")
             .build();
         userRepository.save(user2);
         ExperienceCreate experience = ExperienceCreate.builder()

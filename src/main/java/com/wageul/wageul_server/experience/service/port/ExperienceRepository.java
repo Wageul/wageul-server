@@ -13,5 +13,5 @@ public interface ExperienceRepository {
 
     Optional<Experience> findById(long id);
 
-    public void deleteById(long id);
+    void delete(Experience experience);
 }

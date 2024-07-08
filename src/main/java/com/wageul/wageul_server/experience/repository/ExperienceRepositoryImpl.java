@@ -29,7 +29,7 @@ public class ExperienceRepositoryImpl implements ExperienceRepository {
         return experienceJpaRepository.findById(id).map(ExperienceEntity::toModel);
     }
 
-    public void deleteById(long id) {
-        experienceJpaRepository.deleteById(id);
+    public void delete(Experience experience) {
+        experienceJpaRepository.delete(ExperienceEntity.from(experience));
     }
 }

@@ -52,7 +52,7 @@ public class FakeExperienceRepository implements ExperienceRepository {
     }
 
     @Override
-    public void deleteById(long id) {
-        data.removeIf(item -> item.getId() == id);
+    public void delete(Experience experience) {
+        data.removeIf(item -> item.equals(experience));
     }
 }

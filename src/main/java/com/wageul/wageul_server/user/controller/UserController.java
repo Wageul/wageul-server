@@ -25,10 +25,9 @@ public class UserController {
     // userId에 해당하는 사용자 정보를, 해당 유저가 아니어도 가져올 수 있다.
     @GetMapping("/{userId}")
     public ResponseEntity<User> getById(
-        @PathVariable("userId") long userId,
-        @CookieValue("token") String token) {
+        @PathVariable("userId") long userId) {
         User user = userService.getById(userId);
-        if(user == null || token == null) {
+        if(user == null) {
             HttpHeaders headers = new HttpHeaders();
             headers.add("Location", "/");
             return new ResponseEntity<User>(headers, HttpStatus.FOUND);

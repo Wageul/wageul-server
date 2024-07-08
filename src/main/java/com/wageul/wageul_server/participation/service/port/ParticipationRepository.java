@@ -17,4 +17,6 @@ public interface ParticipationRepository extends ParticipationCustomRepository {
 	Long countByUserIdAndExperienceId(long userId, long experienceId);
 
 	void delete(Participation participation);
+
+	void deleteById(long id);
 }

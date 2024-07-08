@@ -40,4 +40,9 @@ public class ParticipationRepositoryImpl extends ParticipationCustomRepositoryIm
 	public void delete(Participation participation) {
 		participationJpaRepository.delete(ParticipationEntity.from(participation));
 	}
+
+	@Override
+	public void deleteById(long id) {
+		participationJpaRepository.deleteById(id);
+	}
 }

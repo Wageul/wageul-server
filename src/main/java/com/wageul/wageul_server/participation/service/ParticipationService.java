@@ -2,6 +2,7 @@ package com.wageul.wageul_server.participation.service;
 
 import java.util.List;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -16,6 +17,7 @@ import com.wageul.wageul_server.user.service.port.UserRepository;
 
 import lombok.RequiredArgsConstructor;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class ParticipationService {
@@ -50,35 +52,33 @@ public class ParticipationService {
 
 	@Transactional
 	public void delete(long id) {
-		Participation participation = participationRepository.findById(id).orElse(null);
+		Participation participation = participationRepository.findById(id)
+				.orElseThrow(() -> new RuntimeException("NO PARTICIPATION"));
 		long loginUserId = authorizationUtil.getLoginUserId();
-		User user = userRepository.getById(loginUserId);
 		// 체험을 신청한 당사자만 삭제 가능
-		if (participation != null && participation.getUser().equals(user))
-			participationRepository.delete(participation);
+		if (participation.getUser().getId() == loginUserId)
+			participationRepository.deleteById(id);
+		else
+			throw new RuntimeException("ONLY PARTICIPATION CAN CANCEL");
 	}
 
 	@Transactional
 	public void decline(long id) {
 		Participation participation = participationRepository.findById(id).orElse(null);
 		long loginUserId = authorizationUtil.getLoginUserId();
-		User loginUser = userRepository.getById(loginUserId);
-		if(participation != null && participation.getExperience().getWriter().equals(loginUser)) {
+		if(participation != null && participation.getExperience().getWriter().getId() == loginUserId) {
 			// participation이 존재하고, 추방을 요청한 로그인 유저가 작성자라면 추방 성공
-			participationRepository.delete(participation);
+			participationRepository.deleteById(id);
 		} else {
 			throw new RuntimeException("NOT WRITER");
 		}
 	}
 
 	@Transactional
-	public List<User> getExperienceParticipations(long experienceId) {
+	public List<Participation> getExperienceParticipations(long experienceId) {
 		Experience experience = experienceRepository.findById(experienceId).orElse(null);
-		List<Participation> participations = null;
 		if(experience != null) {
-			participations = participationRepository.findByExperience(experience);
-			List<User> users = participations.stream().map(Participation::getUser).toList();
-			return users;
+			return participationRepository.findByExperience(experience);
 		} else {
 			throw new RuntimeException("NO EXPERIENCE");
 		}

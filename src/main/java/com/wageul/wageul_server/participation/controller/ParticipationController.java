@@ -2,7 +2,9 @@ package com.wageul.wageul_server.participation.controller;
 
 import java.util.List;
 
+import com.wageul.wageul_server.participation.dto.ParticipationUserResponse;
 import com.wageul.wageul_server.s3_image.service.S3ReadService;
+import com.wageul.wageul_server.user.dto.UserSimpleProfileDto;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -11,7 +13,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.wageul.wageul_server.experience.domain.Experience;
@@ -58,14 +59,12 @@ public class ParticipationController {
 	}
 
 	// 자신이 신청한 체험 참여 취소
-	@ResponseStatus(HttpStatus.OK)
 	@DeleteMapping("/{participationId}")
 	public void delete(@PathVariable("participationId") long participationId) {
 		participationService.delete(participationId);
 	}
 
 	// 체험 참여자 추방
-	@ResponseStatus(HttpStatus.OK)
 	@DeleteMapping("/decline/{participationId}/{userId}")
 	public void decline(@PathVariable("participationId") long participationId) {
 		participationService.decline(participationId);
@@ -74,10 +73,22 @@ public class ParticipationController {
 	// 체험 별 참여자 목록 조회
 	@GetMapping("/experience/{experienceId}")
 	public ResponseEntity<ExperienceParticipationResponse> getExperienceParticipations(@PathVariable("experienceId") long experienceId) {
-		List<User> users = participationService.getExperienceParticipations(experienceId);
-		users = getUsersWithProfileUrl(users);
-		ExperienceParticipationResponse epr
-			= new ExperienceParticipationResponse(experienceId, users);
+		List<Participation> participations = participationService.getExperienceParticipations(experienceId);
+		List<ParticipationUserResponse> purs = participations
+				.stream()
+				.map(participation -> {
+					UserSimpleProfileDto usp = getUserWithProfileUrl(participation.getUser());
+					return ParticipationUserResponse.builder()
+							.participationId(participation.getId())
+							.userProfile(usp)
+							.build();
+				})
+				.toList();
+
+		ExperienceParticipationResponse epr = ExperienceParticipationResponse.builder()
+				.experienceId(experienceId)
+				.userSimpleProflieList(purs)
+				.build();
 		return ResponseEntity.ok().body(epr);
 	}
 
@@ -89,24 +100,43 @@ public class ParticipationController {
 			.stream()
 			.map(
 				experience -> {
-					List<User> users = participationService.getExperienceParticipations(experience.getId());
-					users = getUsersWithProfileUrl(users);
-					return new ExperienceParticipationResponse(experience.getId(), users);
+					List<Participation> participations = participationService.getExperienceParticipations(experience.getId());
+					List<ParticipationUserResponse> purs = participations
+							.stream()
+							.map(participation -> {
+								UserSimpleProfileDto usp = getUserWithProfileUrl(participation.getUser());
+								return ParticipationUserResponse.builder()
+										.participationId(participation.getId())
+										.userProfile(usp)
+										.build();
+							})
+							.toList();
+					return ExperienceParticipationResponse.builder()
+							.experienceId(experience.getId())
+							.userSimpleProflieList(purs)
+							.build();
 				})
 			.toList();
 
 		return ResponseEntity.ok().body(eprs);
 	}
 
-	private List<User> getUsersWithProfileUrl(List<User> users) {
-		users = users.stream().map(user -> {
-			String profile = user.getProfileImg();
-			if (profile == null) {
-				return user;
-			}
-			String profileUrl = s3ReadService.readFile(profile);
-			return user.withProfileUrl(profileUrl);
-		}).toList();
-		return users;
+	private UserSimpleProfileDto getUserWithProfileUrl(User user) {
+		String profile = user.getProfileImg();
+		if (profile == null) {
+			return UserSimpleProfileDto.builder()
+					.id(user.getId())
+					.profileImg(user.getProfileImg())
+					.name(user.getName())
+					.build();
+		}
+		String profileUrl = s3ReadService.readFile(profile);
+		user = user.withProfileUrl(profileUrl);
+
+		return UserSimpleProfileDto.builder()
+				.id(user.getId())
+				.profileImg(user.getProfileImg())
+				.name(user.getName())
+				.build();
 	}
 }

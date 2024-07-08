@@ -48,7 +48,6 @@ public class ParticipationEntity {
 		ParticipationEntity participationEntity = new ParticipationEntity();
 		participationEntity.user = UserEntity.from(participation.getUser());
 		participationEntity.experience = ExperienceEntity.from(participation.getExperience());
-		participationEntity.createdAt = participation.getCreatedAt();
 		return participationEntity;
 	}
 

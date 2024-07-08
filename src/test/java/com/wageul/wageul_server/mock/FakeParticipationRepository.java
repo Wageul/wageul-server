@@ -55,7 +55,7 @@ public class FakeParticipationRepository implements ParticipationRepository {
 
 	@Override
 	public void delete(Participation participation) {
-		data.removeIf(item -> Objects.equals(item.getId(), participation.getId()));
+		data.removeIf(item -> item.equals(participation));
 	}
 
 	@Override
@@ -66,5 +66,10 @@ public class FakeParticipationRepository implements ParticipationRepository {
 	@Override
 	public List<Participation> findByExperience(Experience experience) {
 		return data.stream().filter(item -> item.getExperience().equals(experience)).toList();
+	}
+
+	@Override
+	public void deleteById(long id) {
+		data.removeIf(item -> item.getId() == id);
 	}
 }

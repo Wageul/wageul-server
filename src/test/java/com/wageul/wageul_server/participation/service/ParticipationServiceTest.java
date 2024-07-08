@@ -158,11 +158,11 @@ class ParticipationServiceTest {
 		Participation participation = participationService.create(participationCreate);
 
 		// when
-		List<User> experienceParticipations = participationService.getExperienceParticipations(experience.getId());
+		List<Participation> experienceParticipations = participationService.getExperienceParticipations(experience.getId());
 
 		// then
 		Assertions.assertThat(experienceParticipations.size()).isEqualTo(1);
-		Assertions.assertThat(experienceParticipations.getLast()).isEqualTo(user);
+		Assertions.assertThat(experienceParticipations.getLast()).isEqualTo(participation);
 	}
 
 	@Test

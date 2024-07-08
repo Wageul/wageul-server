@@ -82,19 +82,19 @@ public class ExperienceEntity {
 
     public Experience toModel() {
         return Experience.builder()
-            .id(id)
-            .title(title)
-            .location(location)
-            .datetime(datetime)
-            .content(content)
-            .duration(duration)
-            .cost(cost)
-            .contact(contact)
-            .limitMember(limitMember)
-            .language(language)
-            .writer(writer.toModel())
-            .createdAt(createdAt)
-            .updatedAt(updatedAt)
-            .build();
+                .id(id)
+                .title(title)
+                .location(location)
+                .datetime(datetime)
+                .content(content)
+                .duration(duration)
+                .cost(cost)
+                .contact(contact)
+                .limitMember(limitMember)
+                .language(language)
+                .writer(writer.toModel())
+                .createdAt(createdAt)
+                .updatedAt(updatedAt)
+                .build();
     }
 }

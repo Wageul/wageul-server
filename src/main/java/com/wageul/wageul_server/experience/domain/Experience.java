@@ -2,6 +2,7 @@ package com.wageul.wageul_server.experience.domain;
 
 import com.wageul.wageul_server.experience.dto.ExperienceCreate;
 import com.wageul.wageul_server.experience.dto.ExperienceUpdate;
+import com.wageul.wageul_server.s3_image.dto.ExImageDto;
 import com.wageul.wageul_server.user.domain.User;
 
 import lombok.Builder;
@@ -9,6 +10,7 @@ import lombok.Getter;
 
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.util.List;
 
 @Getter
 @Builder
@@ -26,6 +28,7 @@ public class Experience {
     private User writer;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
+    private List<ExImageDto> exImageList;
 
     public static Experience from(User writer, ExperienceCreate experienceCreate) {
         return Experience.builder()
@@ -59,7 +62,39 @@ public class Experience {
 
     public Experience withProfileUrl(User writer) {
         return Experience.builder()
+                .id(id)
+                .title(title)
+                .location(location)
+                .datetime(datetime)
+                .content(content)
+                .duration(duration)
+                .cost(cost)
+                .contact(contact)
+                .limitMember(limitMember)
+                .language(language)
                 .writer(writer)
+                .createdAt(createdAt)
+                .updatedAt(updatedAt)
+                .exImageList(exImageList)
+                .build();
+    }
+
+    public Experience withUrl(List<ExImageDto> exImageList) {
+        return Experience.builder()
+                .id(id)
+                .title(title)
+                .location(location)
+                .datetime(datetime)
+                .content(content)
+                .duration(duration)
+                .cost(cost)
+                .contact(contact)
+                .limitMember(limitMember)
+                .language(language)
+                .writer(writer)
+                .createdAt(createdAt)
+                .updatedAt(updatedAt)
+                .exImageList(exImageList)
                 .build();
     }
 }

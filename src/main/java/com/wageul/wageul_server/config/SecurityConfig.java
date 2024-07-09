@@ -2,6 +2,7 @@ package com.wageul.wageul_server.config;
 
 import java.util.Collections;
 
+import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -37,6 +38,9 @@ public class SecurityConfig {
 	@Value("${spring.client.url}")
 	private String clientUrl;
 
+	@Value("${spring.client.test-url}")
+	private String testUrl;
+
 	@Bean
 	public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
 
@@ -49,6 +53,7 @@ public class SecurityConfig {
 					CorsConfiguration configuration = new CorsConfiguration();
 
 					configuration.setAllowedOrigins(Collections.singletonList(clientUrl));
+					configuration.setAllowedOrigins(Collections.singletonList(testUrl));
 					configuration.setAllowedMethods(Collections.singletonList("*"));
 					configuration.setAllowCredentials(true);
 					configuration.setAllowedHeaders(Collections.singletonList("*"));
@@ -111,6 +116,19 @@ public class SecurityConfig {
 					new HttpStatusEntryPoint(HttpStatus.UNAUTHORIZED),
 					new AntPathRequestMatcher("/api/**")
 				));
+
+		// 로그아웃
+		http
+			.logout(logout -> logout
+				.logoutUrl("/api/logout")
+				.logoutSuccessUrl("/")
+				.addLogoutHandler((request, response, authentication) -> {
+							HttpSession session = request.getSession();
+							session.invalidate();
+						})
+				.logoutSuccessHandler((request, response, authentication) ->
+						response.sendRedirect("/"))
+				.deleteCookies("JSESSIONID", "token"));
 
 		return http.build();
 	}

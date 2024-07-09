@@ -2,7 +2,9 @@ package com.wageul.wageul_server.experience.dto;
 
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.util.List;
 
+import com.wageul.wageul_server.s3_image.dto.ExImageDto;
 import lombok.Builder;
 import lombok.Getter;
 
@@ -21,4 +23,5 @@ public class ExperienceNoWriterResponse {
 	private final int limitMember;
 	private final long writerId;
 	private final String language;
+	private final List<ExImageDto> exImageList;
 }

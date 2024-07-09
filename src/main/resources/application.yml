@@ -41,3 +41,4 @@ spring:
 
   client:
     url: ${CLIENT_URL}
+    test-url: http://localhost:3000

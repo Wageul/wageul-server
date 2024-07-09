@@ -3,6 +3,7 @@ package com.wageul.wageul_server.bookmark.dto;
 import java.time.LocalDateTime;
 
 import com.wageul.wageul_server.bookmark.domain.Bookmark;
+import com.wageul.wageul_server.experience.domain.Experience;
 import com.wageul.wageul_server.experience.dto.ExperienceNoWriterResponse;
 import com.wageul.wageul_server.user.dto.UserSimpleProfileDto;
 
@@ -18,26 +19,27 @@ public class BookmarkResponse {
 	private final LocalDateTime createdAt;
 
 	@Builder
-	public BookmarkResponse(Bookmark bookmark) {
-		id = bookmark.getId();
-		user = UserSimpleProfileDto.builder()
+	public BookmarkResponse(Bookmark bookmark, Experience experience) {
+		this.id = bookmark.getId();
+		this.user = UserSimpleProfileDto.builder()
 			.id(bookmark.getUser().getId())
 			.profileImg(bookmark.getUser().getProfileImg())
 			.name(bookmark.getUser().getName())
 			.build();
-		experience = ExperienceNoWriterResponse.builder()
-			.id(bookmark.getExperience().getId())
-			.title(bookmark.getExperience().getTitle())
-			.location(bookmark.getExperience().getLocation())
-			.datetime(bookmark.getExperience().getDatetime())
-			.content(bookmark.getExperience().getContent())
-			.duration(bookmark.getExperience().getDuration())
-			.cost(bookmark.getExperience().getCost())
-			.contact(bookmark.getExperience().getContact())
-			.limitMember(bookmark.getExperience().getLimitMember())
-			.writerId(bookmark.getExperience().getWriter().getId())
-			.language(bookmark.getExperience().getLanguage())
-			.build();
+		this.experience = ExperienceNoWriterResponse.builder()
+				.id(experience.getId())
+				.title(experience.getTitle())
+				.location(experience.getLocation())
+				.datetime(experience.getDatetime())
+				.content(experience.getContent())
+				.duration(experience.getDuration())
+				.cost(experience.getCost())
+				.contact(experience.getContact())
+				.limitMember(experience.getLimitMember())
+				.writerId(experience.getWriter().getId())
+				.language(experience.getLanguage())
+				.exImageList(experience.getExImageList())
+				.build();
 		createdAt = bookmark.getCreatedAt();
 	}
 }

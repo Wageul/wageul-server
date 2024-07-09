@@ -3,6 +3,9 @@ package com.wageul.wageul_server.participation.controller;
 import java.util.List;
 
 import com.wageul.wageul_server.participation.dto.ParticipationUserResponse;
+import com.wageul.wageul_server.s3_image.domain.ExImage;
+import com.wageul.wageul_server.s3_image.dto.ExImageDto;
+import com.wageul.wageul_server.s3_image.service.ExImageService;
 import com.wageul.wageul_server.s3_image.service.S3ReadService;
 import com.wageul.wageul_server.user.dto.UserSimpleProfileDto;
 import org.springframework.http.HttpStatus;
@@ -35,6 +38,7 @@ public class ParticipationController {
 
 	private final ParticipationService participationService;
 	private final ExperienceService experienceService;
+	private final ExImageService exImageService;
 	private final S3ReadService s3ReadService;
 
 	// 참여하기
@@ -52,8 +56,12 @@ public class ParticipationController {
 	@GetMapping
 	public ResponseEntity<List<ParticipationResponse>> getAll() {
 		List<Participation> participations = participationService.getAll();
-		List<ParticipationResponse> participationResponses
-			= participations.stream().map(ParticipationResponse::new).toList();
+		List<ParticipationResponse> participationResponses = participations.stream().map(participation -> {
+			Experience experience = participation.getExperience();
+			List<ExImageDto> exImageDtos = getExperienceWithImageUrl(experience);
+			experience = experience.withUrl(exImageDtos);
+			return new ParticipationResponse(participation, experience);
+		}).toList();
 
 		return ResponseEntity.ok().body(participationResponses);
 	}
@@ -87,7 +95,7 @@ public class ParticipationController {
 
 		ExperienceParticipationResponse epr = ExperienceParticipationResponse.builder()
 				.experienceId(experienceId)
-				.userSimpleProflieList(purs)
+				.userSimpleProfileList(purs)
 				.build();
 		return ResponseEntity.ok().body(epr);
 	}
@@ -113,7 +121,7 @@ public class ParticipationController {
 							.toList();
 					return ExperienceParticipationResponse.builder()
 							.experienceId(experience.getId())
-							.userSimpleProflieList(purs)
+							.userSimpleProfileList(purs)
 							.build();
 				})
 			.toList();
@@ -138,5 +146,18 @@ public class ParticipationController {
 				.profileImg(user.getProfileImg())
 				.name(user.getName())
 				.build();
+	}
+
+	private List<ExImageDto> getExperienceWithImageUrl(Experience experience) {
+		long experienceId = experience.getId();
+		List<ExImage> exImages = exImageService.getExImagesByExperience(experienceId);
+		return exImages
+				.stream().map(exImage -> {
+					String imageUrl = s3ReadService.readFile(exImage.getImage());
+					return ExImageDto.builder()
+							.id(exImage.getId())
+							.image(imageUrl)
+							.build();
+				}).toList();
 	}
 }

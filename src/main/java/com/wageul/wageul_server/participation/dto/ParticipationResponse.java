@@ -13,23 +13,42 @@ public class ParticipationResponse {
 	private final long userId;
 	private final ExperienceNoWriterResponse experience;
 
-	@Builder
 	public ParticipationResponse(Participation participation) {
 		this.id = participation.getId();
 		this.userId = participation.getUser().getId();
 		Experience experience = participation.getExperience();
 		this.experience = ExperienceNoWriterResponse.builder()
-			.id(experience.getId())
-			.title(experience.getTitle())
-			.location(experience.getLocation())
-			.datetime(experience.getDatetime())
-			.content(experience.getContent())
-			.duration(experience.getDuration())
-			.cost(experience.getCost())
-			.contact(experience.getContact())
-			.limitMember(experience.getLimitMember())
-			.writerId(experience.getWriter().getId())
-			.language(experience.getLanguage())
-			.build();
+				.id(experience.getId())
+				.title(experience.getTitle())
+				.location(experience.getLocation())
+				.datetime(experience.getDatetime())
+				.content(experience.getContent())
+				.duration(experience.getDuration())
+				.cost(experience.getCost())
+				.contact(experience.getContact())
+				.limitMember(experience.getLimitMember())
+				.writerId(experience.getWriter().getId())
+				.language(experience.getLanguage())
+				.build();
+	}
+
+	@Builder
+	public ParticipationResponse(Participation participation, Experience experience) {
+		this.id = participation.getId();
+		this.userId = participation.getUser().getId();
+		this.experience = ExperienceNoWriterResponse.builder()
+				.id(experience.getId())
+				.title(experience.getTitle())
+				.location(experience.getLocation())
+				.datetime(experience.getDatetime())
+				.content(experience.getContent())
+				.duration(experience.getDuration())
+				.cost(experience.getCost())
+				.contact(experience.getContact())
+				.limitMember(experience.getLimitMember())
+				.writerId(experience.getWriter().getId())
+				.language(experience.getLanguage())
+				.exImageList(experience.getExImageList())
+				.build();
 	}
 }

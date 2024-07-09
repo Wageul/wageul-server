@@ -88,6 +88,7 @@ public class ExperienceController {
     public List<Experience> getMyExperiences() {
         long userId = authorizationUtil.getLoginUserId();
         List<Experience> experiences = experienceService.findByWriterId(userId);
+        experiences = getExperiencesWithImageUrl(experiences);
         return getExperiencesWithProfileUrl(experiences);
     }
 

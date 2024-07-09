@@ -10,5 +10,5 @@ import lombok.Getter;
 public class ExperienceParticipationResponse {
 
 	private final long experienceId;
-	private final List<ParticipationUserResponse> userSimpleProflieList;
+	private final List<ParticipationUserResponse> userSimpleProfileList;
 }

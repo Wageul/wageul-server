@@ -252,4 +252,46 @@ class ExperienceServiceTest {
                 () -> experienceService.delete(experience1.getId())
         ).hasMessage("ONLY WRITER CAN DELETE EXPERIENCE");
     }
+
+    @Test
+    void 작성한_체험들_조회() {
+        // given
+        User user = User.builder()
+                .id(userId)
+                .email("abc@gmail.com")
+                .build();
+        userRepository.save(user);
+        ExperienceCreate experience1 = ExperienceCreate.builder()
+                .title("title")
+                .location("location")
+                .datetime(LocalDateTime.of(2024, 6, 25, 16, 41, 0))
+                .content("content")
+                .duration(LocalTime.of(4, 0, 0))
+                .cost(10000)
+                .contact("contact")
+                .limitMember(15)
+                .language("language")
+                .build();
+
+        ExperienceCreate experience2 = ExperienceCreate.builder()
+                .title("asdfdasf")
+                .location("asfawefwefawe")
+                .datetime(LocalDateTime.of(2024, 6, 25, 16, 41, 0))
+                .content("asdfsdafs")
+                .duration(LocalTime.of(4, 0, 0))
+                .cost(10000)
+                .contact("contact")
+                .limitMember(15)
+                .language("language")
+                .build();
+
+        Experience newExperience1 = experienceService.create(experience1);
+        Experience newExperience2 = experienceService.create(experience2);
+
+        // when
+        List<Experience> experiences = experienceService.findByWriterId(userId);
+
+        // then
+        Assertions.assertThat(experiences.size()).isEqualTo(2);
+    }
 }

@@ -55,4 +55,9 @@ public class FakeExperienceRepository implements ExperienceRepository {
     public void delete(Experience experience) {
         data.removeIf(item -> item.equals(experience));
     }
+
+    @Override
+    public List<Experience> findByWriterId(long userId) {
+        return data.stream().filter(item -> item.getWriter().getId() == userId).toList();
+    }
 }

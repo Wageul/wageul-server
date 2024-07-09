@@ -30,6 +30,9 @@ public class ProfileImageService {
 
         UserUpdate userUpdateProfile = UserUpdate.builder()
                 .profileImg(profileImageDir)
+                .name(user.getName())
+                .nationality(user.getNationality())
+                .introduce(user.getIntroduce())
                 .build();
 
         user = user.update(userUpdateProfile);

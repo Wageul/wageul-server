@@ -14,4 +14,6 @@ public interface ExperienceRepository {
     Optional<Experience> findById(long id);
 
     void delete(Experience experience);
+
+    List<Experience> findByWriterId(long userId);
 }

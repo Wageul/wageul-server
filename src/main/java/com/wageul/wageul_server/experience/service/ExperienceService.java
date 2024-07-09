@@ -59,4 +59,8 @@ public class ExperienceService {
            throw new RuntimeException("ONLY WRITER CAN DELETE EXPERIENCE");
         }
     }
+
+    public List<Experience> findByWriterId(long userId) {
+        return experienceRepository.findByWriterId(userId);
+    }
 }

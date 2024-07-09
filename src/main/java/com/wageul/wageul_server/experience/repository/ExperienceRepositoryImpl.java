@@ -32,4 +32,9 @@ public class ExperienceRepositoryImpl implements ExperienceRepository {
     public void delete(Experience experience) {
         experienceJpaRepository.delete(ExperienceEntity.from(experience));
     }
+
+    @Override
+    public List<Experience> findByWriterId(long userId) {
+        return experienceJpaRepository.findByWriterId(userId);
+    }
 }

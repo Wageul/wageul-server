@@ -5,6 +5,7 @@ import com.wageul.wageul_server.experience.dto.ExperienceCreate;
 import com.wageul.wageul_server.experience.dto.ExperienceUpdate;
 import com.wageul.wageul_server.experience.service.ExperienceService;
 
+import com.wageul.wageul_server.oauth2.AuthorizationUtil;
 import com.wageul.wageul_server.s3_image.domain.ExImage;
 import com.wageul.wageul_server.s3_image.dto.ExImageDto;
 import com.wageul.wageul_server.s3_image.service.ExImageService;
@@ -28,6 +29,7 @@ public class ExperienceController {
     private final ExperienceService experienceService;
     private final S3ReadService s3ReadService;
     private final ExImageService exImageService;
+    private final AuthorizationUtil authorizationUtil;
 
     @GetMapping
     public List<Experience> getAll() {
@@ -79,6 +81,14 @@ public class ExperienceController {
     @DeleteMapping("/{experienceId}")
     public void delete(@PathVariable("experienceId") long experienceId) {
         experienceService.delete(experienceId);
+    }
+
+    // 내가 생성한 체험 글 읽기
+    @GetMapping("/my")
+    public List<Experience> getMyExperiences() {
+        long userId = authorizationUtil.getLoginUserId();
+        List<Experience> experiences = experienceService.findByWriterId(userId);
+        return getExperiencesWithProfileUrl(experiences);
     }
 
     private List<Experience> getExperiencesWithProfileUrl(List<Experience> experiences) {

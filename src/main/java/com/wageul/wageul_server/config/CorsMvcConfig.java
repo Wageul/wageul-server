@@ -11,6 +11,9 @@ public class CorsMvcConfig implements WebMvcConfigurer {
 	@Value("${spring.client.url}")
 	private String clientUrl;
 
+	@Value("${spring.client.test-url}")
+	private String testUrl;
+
 	@Override
 	public void addCorsMappings(CorsRegistry corsRegistry) {
 		corsRegistry.addMapping("/**")
@@ -18,6 +21,6 @@ public class CorsMvcConfig implements WebMvcConfigurer {
 			.allowedHeaders("*")
 			.exposedHeaders("Set-Cookie")
 			.allowedMethods("GET", "POST", "PUT", "DELETE")
-			.allowedOrigins(clientUrl);
+			.allowedOrigins(clientUrl, testUrl);
 	}
 }

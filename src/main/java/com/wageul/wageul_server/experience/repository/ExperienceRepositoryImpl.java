@@ -35,6 +35,6 @@ public class ExperienceRepositoryImpl implements ExperienceRepository {
 
     @Override
     public List<Experience> findByWriterId(long userId) {
-        return experienceJpaRepository.findByWriterId(userId);
+        return experienceJpaRepository.findAllByWriterId(userId).stream().map(ExperienceEntity::toModel).toList();
     }
 }

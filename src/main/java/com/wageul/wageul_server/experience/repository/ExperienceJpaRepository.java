@@ -6,5 +6,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import java.util.List;
 
 public interface ExperienceJpaRepository extends JpaRepository<ExperienceEntity, Long> {
-    List<Experience> findByWriterId(long userId);
+    List<ExperienceEntity> findAllByWriterId(long userId);
 }

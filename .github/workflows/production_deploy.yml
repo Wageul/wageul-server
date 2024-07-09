@@ -95,6 +95,7 @@ jobs:
           echo "PSQL_PASSWORD=${{ secrets.PSQL_PASSWORD }}" >> .env
           echo "PSQL_URL=${{ secrets.PSQL_URL }}" >> .env
           echo "PSQL_USERNAME=${{ secrets.PSQL_USERNAME }}" >> .env
+          echo "CLIENT_URL=${{ secrets.CLIENT_URL }}" >> .env
 
       # 서버로 .env 파일 전송
       - name: Copy .env file to EC2

@@ -40,4 +40,4 @@ spring:
     expire-length: 999999999
 
   client:
-    url: http://localhost:3000
+    url: ${CLIENT_URL}

@@ -62,14 +62,14 @@ public class UserController {
         User user = userService.getById(userId);
         user = userService.update(user, userUpdate);
 
-        User userResponse = user.withProfileUrl(s3ReadService.readFile(user.getProfileImg()));
+        user = getUserResponse(user);
 
-        return ResponseEntity.ok().body(userResponse);
+        return ResponseEntity.ok().body(user);
     }
 
     private User getUserResponse(User user) {
         String profile = user.getProfileImg();
-        if (profile == null) {
+        if (profile == null || profile.equals("")) {
             return user;
         }
 

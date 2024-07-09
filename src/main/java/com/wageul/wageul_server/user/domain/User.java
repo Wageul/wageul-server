@@ -29,6 +29,7 @@ public class User {
                 .nationality(userUpdate.getNationality())
                 .introduce(userUpdate.getIntroduce())
                 .createdAt(createdAt)
+                .updatedAt(updatedAt)
                 .build();
     }
 

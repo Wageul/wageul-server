@@ -28,7 +28,7 @@ public class ProfileImageController {
             @ModelAttribute ProfileImageRequest profileImageRequest) {
         // S3에서 삭제
         String profileImage = profileImageService.getMyProfileImage();
-        if (profileImage != null) {
+        if (profileImage != null && !profileImage.equals("")) {
             s3DeleteService.deleteFile(profileImage);
         }
 

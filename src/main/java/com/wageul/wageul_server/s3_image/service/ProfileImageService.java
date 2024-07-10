@@ -29,7 +29,6 @@ public class ProfileImageService {
                 .orElseThrow(() -> new RuntimeException("NO USER"));
 
         UserUpdate userUpdateProfile = UserUpdate.builder()
-                .profileImg(profileImageDir)
                 .name(user.getName())
                 .nationality(user.getNationality())
                 .introduce(user.getIntroduce())

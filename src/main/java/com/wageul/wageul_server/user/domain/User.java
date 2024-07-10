@@ -23,7 +23,7 @@ public class User {
         return User.builder()
                 .id(id)
                 .email(email)
-                .profileImg(userUpdate.getProfileImg())
+                .profileImg(profileImg)
                 .name(userUpdate.getName())
                 .username(username)
                 .nationality(userUpdate.getNationality())

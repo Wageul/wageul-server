@@ -38,7 +38,6 @@ class UserServiceTest {
                 .introduce("")
                 .build();
         UserUpdate userUpdate = UserUpdate.builder()
-                .profileImg("haha.png")
                 .nationality("Korea")
                 .introduce("hello world~")
                 .build();
@@ -47,7 +46,7 @@ class UserServiceTest {
         User updatedUser = userService.update(user, userUpdate);
 
         // then
-        Assertions.assertThat(updatedUser.getProfileImg()).isEqualTo("haha.png");
+        Assertions.assertThat(updatedUser.getProfileImg()).isEqualTo("abc.png");
         Assertions.assertThat(updatedUser.getNationality()).isEqualTo("Korea");
         Assertions.assertThat(updatedUser.getIntroduce()).isEqualTo("hello world~");
     }

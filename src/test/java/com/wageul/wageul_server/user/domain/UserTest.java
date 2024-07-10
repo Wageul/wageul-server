@@ -20,7 +20,6 @@ class UserTest {
                 .introduce("")
                 .build();
         UserUpdate userUpdate = UserUpdate.builder()
-                .profileImg("haha.png")
                 .nationality("Korea")
                 .introduce("hello world~")
                 .build();
@@ -28,7 +27,7 @@ class UserTest {
         user = user.update(userUpdate);
 
         // then
-        Assertions.assertThat(user.getProfileImg()).isEqualTo("haha.png");
+        Assertions.assertThat(user.getProfileImg()).isEqualTo("abc.png");
         Assertions.assertThat(user.getNationality()).isEqualTo("Korea");
         Assertions.assertThat(user.getIntroduce()).isEqualTo("hello world~");
     }

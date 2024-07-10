@@ -3,6 +3,7 @@ package com.wageul.wageul_server.s3_image.service;
 import com.wageul.wageul_server.oauth2.AuthorizationUtil;
 import com.wageul.wageul_server.s3_image.dto.ProfileImageRequest;
 import com.wageul.wageul_server.s3_image.dto.ProfileImageResponse;
+import com.wageul.wageul_server.s3_image.dto.ProfileUpdate;
 import com.wageul.wageul_server.user.domain.User;
 import com.wageul.wageul_server.user.dto.UserUpdate;
 import com.wageul.wageul_server.user.service.port.UserRepository;
@@ -28,13 +29,11 @@ public class ProfileImageService {
         User user = userRepository.findById(authorizationUtil.getLoginUserId())
                 .orElseThrow(() -> new RuntimeException("NO USER"));
 
-        UserUpdate userUpdateProfile = UserUpdate.builder()
-                .name(user.getName())
-                .nationality(user.getNationality())
-                .introduce(user.getIntroduce())
+        ProfileUpdate userUpdateProfile = ProfileUpdate.builder()
+                .profile(profileImageDir)
                 .build();
 
-        user = user.update(userUpdateProfile);
+        user = user.updateProfile(userUpdateProfile);
         return userRepository.save(user);
     }
 }

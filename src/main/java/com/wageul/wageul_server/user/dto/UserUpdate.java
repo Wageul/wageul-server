@@ -7,15 +7,14 @@ import lombok.Getter;
 @Getter
 public class UserUpdate {
 
-    private final String name;
-    private final String nationality;
-    private final String introduce;
+    private String name;
+    private String nationality;
+    private String introduce;
+
+    public UserUpdate() {}
 
     @Builder
-    public UserUpdate(
-        @JsonProperty("name") String name,
-        @JsonProperty("nationality") String nationality,
-        @JsonProperty("introduce") String introduce) {
+    public UserUpdate(String name, String nationality, String introduce) {
         this.name = name;
         this.nationality = nationality;
         this.introduce = introduce;

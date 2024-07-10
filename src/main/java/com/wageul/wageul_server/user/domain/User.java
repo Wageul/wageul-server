@@ -2,6 +2,7 @@ package com.wageul.wageul_server.user.domain;
 
 import java.time.LocalDateTime;
 
+import com.wageul.wageul_server.s3_image.dto.ProfileUpdate;
 import com.wageul.wageul_server.user.dto.UserUpdate;
 import lombok.Builder;
 import lombok.Getter;
@@ -38,6 +39,20 @@ public class User {
                 .id(id)
                 .email(email)
                 .profileImg(profileUrl)
+                .name(name)
+                .username(username)
+                .nationality(nationality)
+                .introduce(introduce)
+                .createdAt(createdAt)
+                .updatedAt(updatedAt)
+                .build();
+    }
+
+    public User updateProfile(ProfileUpdate userUpdateProfile) {
+        return User.builder()
+                .id(id)
+                .email(email)
+                .profileImg(userUpdateProfile.getProfile())
                 .name(name)
                 .username(username)
                 .nationality(nationality)

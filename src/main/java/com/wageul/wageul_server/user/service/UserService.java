@@ -37,4 +37,15 @@ public class UserService {
         updatedUser = userRepository.save(updatedUser);
         return updatedUser;
     }
+
+    public void deleteById(long userId) {
+        long loginUserId = authorizationUtil.getLoginUserId();
+        if (loginUserId == userId) {
+            User user = userRepository.findById(userId).orElseThrow(
+                    () -> new RuntimeException("NO USER"));
+            userRepository.deleteById(userId);
+        } else {
+            throw new RuntimeException("ONLY LOGIN USER CAN DELETE HIMSELF");
+        }
+    }
 }

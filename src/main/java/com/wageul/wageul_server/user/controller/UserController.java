@@ -67,6 +67,11 @@ public class UserController {
         return ResponseEntity.ok().body(user);
     }
 
+    @DeleteMapping("/{userId}")
+    public void delete(@PathVariable("userId") long userId) {
+        userService.deleteById(userId);
+    }
+
     private User getUserResponse(User user) {
         String profile = user.getProfileImg();
         if (profile == null || profile.equals("")) {

@@ -52,4 +52,14 @@ public class FakeUserRepository implements UserRepository {
             return user;
         }
     }
+
+    @Override
+    public void delete(User user) {
+        data.removeIf(item -> item.equals(user));
+    }
+
+    @Override
+    public void deleteById(long userId) {
+        data.removeIf(item -> item.getId() == userId);
+    }
 }

@@ -25,10 +25,10 @@ public class User {
                 .id(id)
                 .email(email)
                 .profileImg(profileImg)
-                .name(userUpdate.getName())
+                .name(userUpdate.getName() == null ? name : userUpdate.getName())
                 .username(username)
-                .nationality(userUpdate.getNationality())
-                .introduce(userUpdate.getIntroduce())
+                .nationality(userUpdate.getNationality() == null ? nationality : userUpdate.getNationality())
+                .introduce(userUpdate.getIntroduce() == null ? introduce : userUpdate.getIntroduce())
                 .createdAt(createdAt)
                 .updatedAt(updatedAt)
                 .build();

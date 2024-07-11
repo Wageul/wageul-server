@@ -40,7 +40,7 @@ public class ReviewService {
 			.orElseThrow(() -> new RuntimeException("NO DELETED REVIEW"));
 		User loginUser = userRepository.findById(authorizationUtil.getLoginUserId())
 				.orElseThrow(() -> new RuntimeException("NO LOGIN USER INFO"));
-		if(review.getWriter().getId() == loginUser.getId()) {
+		if(review.getWriter().getId() != loginUser.getId()) {
 			throw new RuntimeException("WRITER IS NOT EQUAL TO LOGIN USER");
 		}
 		reviewRepository.deleteById(review.getId());

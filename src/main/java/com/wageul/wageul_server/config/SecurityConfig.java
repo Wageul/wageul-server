@@ -100,7 +100,8 @@ public class SecurityConfig {
 						"/api/experience/**",
 						"/api/participation/experience/**",
 						"/api/upload/read-ex-image/**",
-						"/api/user/**"
+						"/api/user/**",
+						"/api/review/user/**"
 				).permitAll()
 				.anyRequest().authenticated());
 

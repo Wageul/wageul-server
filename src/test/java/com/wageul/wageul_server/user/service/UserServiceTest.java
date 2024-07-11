@@ -15,7 +15,7 @@ class UserServiceTest {
 
     private UserService userService;
     private UserRepository fakeUserRepository;
-    private AuthorizationUtil fakeAuthorizationUtil;
+    private FakeAuthorizationUtil fakeAuthorizationUtil;
 
     @BeforeEach
     void init() {
@@ -74,5 +74,49 @@ class UserServiceTest {
         Assertions.assertThat(myInfo.getName()).isEqualTo("wonchae");
         Assertions.assertThat(myInfo.getNationality()).isEqualTo("Korea");
         Assertions.assertThat(myInfo.getIntroduce()).isEqualTo("");
+    }
+
+    @Test
+    void 회원삭제() {
+        // given
+        User user = User.builder()
+                .id(1)
+                .email("ywonchae62@gmail.com")
+                .profileImg("abc.png")
+                .name("wonchae")
+                .nationality("Korea")
+                .introduce("")
+                .build();
+
+        fakeUserRepository.save(user);
+
+        // when
+        userService.deleteById(user.getId());
+
+        // then
+        Assertions.assertThat(userService.getById(user.getId())).isEqualTo(null);
+    }
+
+    @Test
+    void 회원삭제는_본인만() {
+        // given
+        User user = User.builder()
+                .id(1)
+                .email("ywonchae62@gmail.com")
+                .profileImg("abc.png")
+                .name("wonchae")
+                .nationality("Korea")
+                .introduce("")
+                .build();
+
+        fakeUserRepository.save(user);
+        fakeAuthorizationUtil.setLoginUserId(2L);
+
+        // when
+
+        // then
+        Assertions.assertThatThrownBy(
+                () -> userService.deleteById(user.getId())
+        ).hasMessage("ONLY LOGIN USER CAN DELETE HIMSELF");
     }
 }

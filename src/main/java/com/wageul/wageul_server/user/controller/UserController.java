@@ -5,12 +5,16 @@ import com.wageul.wageul_server.s3_image.service.S3ReadService;
 import com.wageul.wageul_server.user.domain.User;
 import com.wageul.wageul_server.user.dto.UserUpdate;
 import com.wageul.wageul_server.user.service.UserService;
+import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.io.IOException;
 
 @Slf4j
 @RestController
@@ -65,6 +69,18 @@ public class UserController {
         user = getUserResponse(user);
 
         return ResponseEntity.ok().body(user);
+    }
+
+    @DeleteMapping("/{userId}")
+    public void delete(
+            @PathVariable("userId") long userId,
+            HttpServletResponse response) throws IOException {
+        userService.deleteById(userId);
+        Cookie cookie = new Cookie("token", null);
+        cookie.setMaxAge(0);
+        cookie.setPath("/");
+        response.addCookie(cookie);
+        response.sendRedirect("/");
     }
 
     private User getUserResponse(User user) {

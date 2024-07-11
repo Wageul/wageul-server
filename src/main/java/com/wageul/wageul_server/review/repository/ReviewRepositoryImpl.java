@@ -35,4 +35,9 @@ public class ReviewRepositoryImpl extends ReviewCustomRepositoryImpl implements 
 	public List<Review> findByTargetId(long userId) {
 		return reviewJpaRepository.findByTargetId(userId).stream().map(ReviewEntity::toModel).toList();
 	}
+
+	@Override
+	public void deleteById(Long id) {
+		reviewJpaRepository.deleteById(id);
+	}
 }

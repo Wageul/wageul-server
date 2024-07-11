@@ -14,4 +14,6 @@ public interface ReviewRepository extends ReviewCustomRepository {
 	void delete(Review review);
 
     List<Review> findByTargetId(long userId);
+
+    void deleteById(Long id);
 }

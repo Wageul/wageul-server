@@ -43,7 +43,7 @@ public class ReviewService {
 		if(!review.getWriter().equals(loginUser)) {
 			throw new RuntimeException("WRITER IS NOT EQUAL TO LOGIN USER");
 		}
-		reviewRepository.delete(review);
+		reviewRepository.deleteById(review.getId());
 	}
 
 	public List<Review> findByTargetId(long userId) {

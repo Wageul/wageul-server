@@ -2,6 +2,10 @@ package com.wageul.wageul_server.jwt;
 
 import java.io.IOException;
 
+import io.jsonwebtoken.ExpiredJwtException;
+import io.jsonwebtoken.MalformedJwtException;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -23,6 +27,9 @@ import lombok.extern.slf4j.Slf4j;
 public class JwtFilter extends OncePerRequestFilter {
 
 	private final JwtUtil jwtUtil;
+
+	@Value("${spring.jwt.expire-length}")
+	private long expireLong;
 
 	@Override
 	protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response,
@@ -64,8 +71,33 @@ public class JwtFilter extends OncePerRequestFilter {
 		String token = authorization;
 
 		//토큰 소멸 시간 검증
-		if (jwtUtil.isExpired(token)) {
+		try {
+			jwtUtil.isExpired(token);
+			log.info("passed!!");
+		} catch (ExpiredJwtException e) {
 			log.info("token is expired!");
+			log.info("jwt error: {}", e.getMessage());
+
+			Cookie newToken = new Cookie("token", "");
+			newToken.setMaxAge(0);
+			newToken.setPath("/");
+
+			response.addCookie(newToken);
+
+			filterChain.doFilter(request, response);
+
+			//조건이 해당되면 메소드 종료 (필수)
+			return;
+		} catch (MalformedJwtException e){
+			log.info("token is invalid!");
+			log.info("jwt error: {}", e.getMessage());
+
+			Cookie newToken = new Cookie("token", "");
+			newToken.setMaxAge(0);
+			newToken.setPath("/");
+
+			response.addCookie(newToken);
+
 			filterChain.doFilter(request, response);
 
 			//조건이 해당되면 메소드 종료 (필수)

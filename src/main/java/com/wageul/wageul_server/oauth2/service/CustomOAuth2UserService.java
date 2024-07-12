@@ -62,20 +62,11 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
 
 			return new CustomOAuth2User(userDto);
 		} else {
-			// 정보 업데이트
-			UserUpdate userUpdate = UserUpdate.builder()
-				.name(oAuth2Response.getName())
-				.build();
-
-			existData = existData.update(userUpdate);
-
-			User user = userRepository.save(existData);
-
 			UserDto userDto = UserDto.builder()
-				.id(user.getId())
-				.email(oAuth2Response.getEmail())
-				.name(oAuth2Response.getName())
-				.username(username)
+				.id(existData.getId())
+				.email(existData.getEmail())
+				.name(existData.getName())
+				.username(existData.getUsername())
 				.build();
 
 			return new CustomOAuth2User(userDto);

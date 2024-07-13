@@ -44,6 +44,10 @@ public class JwtFilter extends OncePerRequestFilter {
 			filterChain.doFilter(request, response);
 			return;
 		}
+		if (requestUri.startsWith("/api/user") && request.getMethod().equals("GET")) {
+			filterChain.doFilter(request, response);
+			return;
+		}
 
 		//cookie들을 불러온 뒤 token Key에 담긴 쿠키를 찾음
 		String authorization = null;

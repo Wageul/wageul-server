@@ -83,4 +83,9 @@ public class ParticipationService {
 			throw new RuntimeException("NO EXPERIENCE");
 		}
 	}
+
+	// userId가 참여한 체험 조회
+	public List<Participation> getUserParticipation(long userId) {
+		return participationRepository.findByUserId(userId);
+	}
 }

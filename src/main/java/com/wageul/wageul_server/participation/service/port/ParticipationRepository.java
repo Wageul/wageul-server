@@ -19,4 +19,6 @@ public interface ParticipationRepository extends ParticipationCustomRepository {
 	void delete(Participation participation);
 
 	void deleteById(long id);
+
+	List<Participation> findByUserId(long userId);
 }

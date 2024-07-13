@@ -72,4 +72,9 @@ public class FakeParticipationRepository implements ParticipationRepository {
 	public void deleteById(long id) {
 		data.removeIf(item -> item.getId() == id);
 	}
+
+	@Override
+	public List<Participation> findByUserId(long userId) {
+		return data.stream().filter(item -> item.getUser().getId() == userId).toList();
+	}
 }

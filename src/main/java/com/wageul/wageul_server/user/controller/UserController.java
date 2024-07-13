@@ -1,8 +1,11 @@
 package com.wageul.wageul_server.user.controller;
 
+import com.wageul.wageul_server.experience.service.ExperienceService;
 import com.wageul.wageul_server.jwt.JwtUtil;
+import com.wageul.wageul_server.participation.service.ParticipationService;
 import com.wageul.wageul_server.s3_image.service.S3ReadService;
 import com.wageul.wageul_server.user.domain.User;
+import com.wageul.wageul_server.user.dto.UserDetailDto;
 import com.wageul.wageul_server.user.dto.UserUpdate;
 import com.wageul.wageul_server.user.service.UserService;
 import jakarta.servlet.http.Cookie;
@@ -23,39 +26,55 @@ import java.io.IOException;
 public class UserController {
 
     private final UserService userService;
+    private final ExperienceService experienceService;
+    private final ParticipationService participationService;
     private final S3ReadService s3ReadService;
     private final JwtUtil jwtUtil;
 
     // userId에 해당하는 사용자 정보를, 해당 유저가 아니어도 가져올 수 있다.
     @GetMapping("/{userId}")
-    public ResponseEntity<User> getById(
+    public ResponseEntity<UserDetailDto> getById(
         @PathVariable("userId") long userId) {
         User user = userService.getById(userId);
         if(user == null) {
             HttpHeaders headers = new HttpHeaders();
             headers.add("Location", "/");
-            return new ResponseEntity<User>(headers, HttpStatus.FOUND);
+            return new ResponseEntity<UserDetailDto>(headers, HttpStatus.FOUND);
         } else {
             // profileImg 경로를 S3 전체 경로로 변환해서 응답
             user = getUserResponse(user);
-            return ResponseEntity.ok().body(user);
+            long experienceCnt = experienceService.findByWriterId(user.getId()).size();
+            long participationCnt = participationService.getUserParticipation(user.getId()).size();
+            UserDetailDto userDetailDto = UserDetailDto.builder()
+                    .user(user)
+                    .createdExCnt(experienceCnt)
+                    .joinedPtCnt(participationCnt)
+                    .build();
+            return ResponseEntity.ok().body(userDetailDto);
         }
     }
 
     // 자신의 계정 정보를 가져온다.
     @GetMapping
-    public ResponseEntity<User> getMyInfo(@CookieValue("token") String token) {
+    public ResponseEntity<UserDetailDto> getMyInfo(@CookieValue("token") String token) {
         if(token == null) {
             HttpHeaders headers = new HttpHeaders();
             headers.add("Location", "/");
-            return new ResponseEntity<User>(headers, HttpStatus.FOUND);
+            return new ResponseEntity<UserDetailDto>(headers, HttpStatus.FOUND);
         } else {
             long loginId = jwtUtil.getUserId(token);
             User user = userService.getMyInfo(loginId);
 
             // profileImg 경로를 S3 전체 경로로 변환해서 응답
             user = getUserResponse(user);
-            return ResponseEntity.ok().body(user);
+            long experienceCnt = experienceService.findByWriterId(user.getId()).size();
+            long participationCnt = participationService.getUserParticipation(user.getId()).size();
+            UserDetailDto userDetailDto = UserDetailDto.builder()
+                    .user(user)
+                    .createdExCnt(experienceCnt)
+                    .joinedPtCnt(participationCnt)
+                    .build();
+            return ResponseEntity.ok().body(userDetailDto);
         }
     }
 

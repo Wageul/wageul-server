@@ -45,4 +45,9 @@ public class ParticipationRepositoryImpl extends ParticipationCustomRepositoryIm
 	public void deleteById(long id) {
 		participationJpaRepository.deleteById(id);
 	}
+
+	@Override
+	public List<Participation> findByUserId(long userId) {
+		return participationJpaRepository.findByUserId(userId).stream().map(ParticipationEntity::toModel).toList();
+	}
 }

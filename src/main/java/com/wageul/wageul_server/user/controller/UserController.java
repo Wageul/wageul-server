@@ -40,18 +40,18 @@ public class UserController {
         if(user == null) {
             log.info("USER NOT FOUND");
             return ResponseEntity.status(HttpStatus.NOT_FOUND).header(HttpHeaders.LOCATION, "/").build();
-        } else {
-            // profileImg 경로를 S3 전체 경로로 변환해서 응답
-            user = getUserResponse(user);
-            long experienceCnt = experienceService.findByWriterId(user.getId()).size();
-            long participationCnt = participationService.getUserParticipation(user.getId()).size();
-            UserDetailDto userDetailDto = UserDetailDto.builder()
-                    .user(user)
-                    .createdExCnt(experienceCnt)
-                    .joinedPtCnt(participationCnt)
-                    .build();
-            return ResponseEntity.ok().body(userDetailDto);
         }
+        log.info("USER FOUND");
+        // profileImg 경로를 S3 전체 경로로 변환해서 응답
+        user = getUserResponse(user);
+        long experienceCnt = experienceService.findByWriterId(user.getId()).size();
+        long participationCnt = participationService.getUserParticipation(user.getId()).size();
+        UserDetailDto userDetailDto = UserDetailDto.builder()
+                .user(user)
+                .createdExCnt(experienceCnt)
+                .joinedPtCnt(participationCnt)
+                .build();
+        return ResponseEntity.ok().body(userDetailDto);
     }
 
     // 자신의 계정 정보를 가져온다.
@@ -63,6 +63,7 @@ public class UserController {
             log.info("USER NOT FOUND");
             return ResponseEntity.status(HttpStatus.NOT_FOUND).header(HttpHeaders.LOCATION, "/").build();
         }
+        log.info("USER FOUND");
 
         // profileImg 경로를 S3 전체 경로로 변환해서 응답
         user = getUserResponse(user);

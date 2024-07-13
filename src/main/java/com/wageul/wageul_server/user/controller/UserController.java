@@ -40,7 +40,7 @@ public class UserController {
         if(user == null) {
             HttpHeaders headers = new HttpHeaders();
             headers.add("Location", "/");
-            return new ResponseEntity<UserDetailDto>(headers, HttpStatus.FOUND);
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         } else {
             // profileImg 경로를 S3 전체 경로로 변환해서 응답
             user = getUserResponse(user);
@@ -63,7 +63,7 @@ public class UserController {
         if(user == null) {
             HttpHeaders headers = new HttpHeaders();
             headers.add("Location", "/");
-            return new ResponseEntity<UserDetailDto>(headers, HttpStatus.FOUND);
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
 
         // profileImg 경로를 S3 전체 경로로 변환해서 응답

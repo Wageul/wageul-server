@@ -60,6 +60,12 @@ public class UserController {
     public ResponseEntity<UserDetailDto> getMyInfo() {
         User user = userService.getMyInfo(authorizationUtil.getLoginUserId());
 
+        if(user == null) {
+            HttpHeaders headers = new HttpHeaders();
+            headers.add("Location", "/");
+            return new ResponseEntity<UserDetailDto>(headers, HttpStatus.FOUND);
+        }
+
         // profileImg 경로를 S3 전체 경로로 변환해서 응답
         user = getUserResponse(user);
         long experienceCnt = experienceService.findByWriterId(user.getId()).size();

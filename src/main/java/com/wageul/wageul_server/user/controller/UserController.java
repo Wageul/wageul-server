@@ -38,9 +38,7 @@ public class UserController {
         @PathVariable("userId") long userId) {
         User user = userService.getById(userId);
         if(user == null) {
-            HttpHeaders headers = new HttpHeaders();
-            headers.add("Location", "/");
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).header(HttpHeaders.LOCATION, "/").build();
         } else {
             // profileImg 경로를 S3 전체 경로로 변환해서 응답
             user = getUserResponse(user);
@@ -63,7 +61,7 @@ public class UserController {
         if(user == null) {
             HttpHeaders headers = new HttpHeaders();
             headers.add("Location", "/");
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).header(HttpHeaders.LOCATION, "/").build();
         }
 
         // profileImg 경로를 S3 전체 경로로 변환해서 응답

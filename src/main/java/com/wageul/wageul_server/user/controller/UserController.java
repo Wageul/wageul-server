@@ -13,6 +13,7 @@ import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -31,6 +32,9 @@ public class UserController {
     private final ParticipationService participationService;
     private final S3ReadService s3ReadService;
     private final AuthorizationUtil authorizationUtil;
+
+    @Value("${spring.client.url}")
+    private String clientUrl;
 
     // userId에 해당하는 사용자 정보를, 해당 유저가 아니어도 가져올 수 있다.
     @GetMapping("/{userId}")
@@ -98,7 +102,8 @@ public class UserController {
         cookie.setMaxAge(0);
         cookie.setPath("/");
         response.addCookie(cookie);
-        response.sendRedirect("/");
+        response.setStatus(302);
+        response.sendRedirect(clientUrl + "/");
     }
 
     private User getUserResponse(User user) {

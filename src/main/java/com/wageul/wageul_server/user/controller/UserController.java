@@ -102,8 +102,7 @@ public class UserController {
         cookie.setMaxAge(0);
         cookie.setPath("/");
         response.addCookie(cookie);
-        response.setStatus(302);
-        response.setHeader("Location", "/");
+        response.setStatus(200);
     }
 
     private User getUserResponse(User user) {

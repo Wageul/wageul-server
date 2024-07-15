@@ -105,6 +105,20 @@ public class SecurityConfig {
 				).permitAll()
 				.anyRequest().authenticated());
 
+		// 로그아웃
+		http
+				.logout(logout -> logout
+						.logoutUrl("/api/logout")
+						.logoutSuccessUrl(clientUrl)
+						.addLogoutHandler((request, response, authentication) -> {
+							HttpSession session = request.getSession();
+							session.invalidate();
+						})
+						.logoutSuccessHandler((request, response, authentication) -> {
+							response.setStatus(200);
+						})
+						.deleteCookies("JSESSIONID", "token"));
+
 		//세션 설정 : STATELESS
 		http
 			.sessionManagement((session) -> session
@@ -117,21 +131,6 @@ public class SecurityConfig {
 					new HttpStatusEntryPoint(HttpStatus.UNAUTHORIZED),
 					new AntPathRequestMatcher("/api/**")
 				));
-
-		// 로그아웃
-		http
-			.logout(logout -> logout
-				.logoutUrl("/api/logout")
-				.logoutSuccessUrl(clientUrl)
-				.addLogoutHandler((request, response, authentication) -> {
-							HttpSession session = request.getSession();
-							session.invalidate();
-						})
-				.logoutSuccessHandler((request, response, authentication) -> {
-					response.setStatus(302);
-					response.setHeader("Location", "/");
-				})
-				.deleteCookies("JSESSIONID", "token"));
 
 		return http.build();
 	}

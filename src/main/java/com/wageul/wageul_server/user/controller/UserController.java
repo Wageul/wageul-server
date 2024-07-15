@@ -102,8 +102,7 @@ public class UserController {
         cookie.setMaxAge(0);
         cookie.setPath("/");
         response.addCookie(cookie);
-        response.setStatus(302);
-        response.sendRedirect(clientUrl + "/");
+        response.sendRedirect(clientUrl);
     }
 
     private User getUserResponse(User user) {

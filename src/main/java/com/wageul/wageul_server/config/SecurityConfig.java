@@ -122,15 +122,12 @@ public class SecurityConfig {
 		http
 			.logout(logout -> logout
 				.logoutUrl("/api/logout")
-				.logoutSuccessUrl(clientUrl + "/")
+				.logoutSuccessUrl(clientUrl)
 				.addLogoutHandler((request, response, authentication) -> {
 							HttpSession session = request.getSession();
 							session.invalidate();
 						})
-				.logoutSuccessHandler((request, response, authentication) -> {
-						response.setStatus(302);
-						response.sendRedirect(clientUrl + "/");
-				})
+				.logoutSuccessHandler((request, response, authentication) -> response.sendRedirect(clientUrl))
 				.deleteCookies("JSESSIONID", "token"));
 
 		return http.build();

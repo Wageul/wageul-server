@@ -127,7 +127,10 @@ public class SecurityConfig {
 							HttpSession session = request.getSession();
 							session.invalidate();
 						})
-				.logoutSuccessHandler((request, response, authentication) -> response.sendRedirect(clientUrl))
+				.logoutSuccessHandler((request, response, authentication) -> {
+					response.setStatus(302);
+					response.setHeader("Location", "/");
+				})
 				.deleteCookies("JSESSIONID", "token"));
 
 		return http.build();
